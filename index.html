@@ -992,9 +992,18 @@ document.querySelectorAll("[data-go]").forEach(function(e){e.onclick=function(){
 function fromHash(){var v=location.hash.slice(1);go(document.getElementById(v)?v:"home")}
 window.addEventListener("hashchange",fromHash);
 
-loadSavedData();
-renderAll(true);
-fromHash();
+loadAuthCfg();
+var savedSess=null;
+try{savedSess=JSON.parse(sessionStorage.getItem(SESSION_KEY)||"null")}catch(err){}
+if(savedSess){
+  setLoggedIn(savedSess);
+  loadSavedData();
+  renderAll(true);
+  fromHash();
+  if(authCfg.gsUrl)pullFromGoogleSheet(true);
+}else{
+  setLoggedIn(null);
+}
 </script>
 </body>
 </html>
