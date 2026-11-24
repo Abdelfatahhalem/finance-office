@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>نظام إدارة التمويل - نسخة محفوظة · مكتب التمويل · تبوك</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E3B43;--bg:#F2F5F4;--card:#fff;--tx:#14262b;--mu:#62767b;--ln:#E1E8E6;--gold:#C8962E;--ok:#1F8A5B;--bad:#C0392B;--blue:#2F6FDE;--vio:#7A4FD0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1417;--card:#142126;--tx:#E8F0EF;--mu:#8FA5A9;--ln:#22343A;--ink:#0A2A30}}
+:root[data-theme="dark"]{--bg:#0C1417;--card:#142126;--tx:#E8F0EF;--mu:#8FA5A9;--ln:#22343A;--ink:#0A2A30}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tajawal,Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:15px}
+.app{display:flex;min-height:100vh}
+aside{width:232px;background:var(--ink);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
+.brand{font-weight:800;font-size:18px;padding:0 10px 4px}
+.brand small{display:block;font-weight:400;font-size:12px;color:#9fc0c4;margin-top:2px}
+.nav{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;color:#cfe3e5;font:inherit;padding:11px 12px;border-radius:10px;cursor:pointer;text-align:right}
+.nav:hover{background:rgba(255,255,255,.07)}
+.nav.on{background:rgba(200,150,46,.18);color:#fff;box-shadow:inset -3px 0 0 var(--gold)}
+.nav i{font-style:normal;width:22px;text-align:center}
+.me{margin-top:auto;font-size:12px;color:#9fc0c4;padding:10px;border-top:1px solid rgba(255,255,255,.12)}
+main{flex:1;padding:26px 30px;min-width:0}
+.hero{background:linear-gradient(115deg,var(--ink),#16636b);color:#fff;border-radius:16px;padding:24px 28px;margin-bottom:22px;border-inline-start:6px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.hero h1{margin:0 0 6px;font-size:26px;font-weight:800}
+.hero p{margin:0;color:#cfe3e5}
+.save-badge{background:rgba(31,138,91,.22);border:1px solid rgba(159,192,196,.35);color:#e8f8f0;padding:8px 14px;border-radius:10px;font-size:13px;font-weight:700}
+h2{font-size:20px;margin:0 0 16px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+.btn{background:var(--gold);color:#fff;border:0;border-radius:9px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.sec{background:var(--card);color:var(--tx);border:1px solid var(--ln)}
+.btn.sec.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:7px}
+.btn.del{background:#FCE8E6;color:#C0392B;border:1px solid #F5C2BC}
+.btn.del:hover{background:#C0392B;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px;text-align:right;font:inherit;color:var(--tx);cursor:pointer;border-top:5px solid var(--c);transition:transform .15s}
+.kpi:hover{transform:translateY(-3px)}
+.kpi span{display:block;color:var(--mu);font-size:13px}
+.kpi b{display:block;font-size:26px;font-weight:800;margin:6px 0 2px}
+.kpi em{font-style:normal;font-size:12px;color:var(--c)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:18px;margin-bottom:18px}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+.bars{display:flex;align-items:flex-end;gap:16px;height:170px;padding-top:10px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12px;color:var(--mu)}
+.bars u{display:block;width:100%;max-width:46px;border-radius:6px 6px 0 0;background:var(--ok)}
+.bars u.d{background:var(--ln);margin-bottom:-2px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{background:var(--bg);color:var(--mu);font-weight:500;font-size:13px;text-align:right;padding:10px 12px}
+td{padding:11px 12px;border-bottom:1px solid var(--ln)}
+.pill{padding:3px 11px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;background:var(--c)}
+.view{display:none}.view.on{display:block}
+.inv{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.inv .card{margin:0;border-inline-start:5px solid var(--gold)}
+.inv-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.note{color:var(--mu);font-size:12px;margin-top:6px}
+input,select{font:inherit;padding:9px 12px;border:1px solid var(--ln);border-radius:9px;background:var(--card);color:var(--tx)}
+@media(max-width:820px){.app{flex-direction:column}aside{width:100%;height:auto;position:static;flex-direction:row;overflow-x:auto;padding:10px}.brand,.me{display:none}.nav{width:auto;white-space:nowrap}main{padding:16px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+<div class="brand">نظام التمويل<small>مكتب التمويل · تبوك</small></div>
+<button class="nav" data-v="home"><i>▦</i>لوحة التحكم</button>
+<button class="nav" data-v="cl"><i>◐</i>العملاء</button>
+<button class="nav" data-v="fin"><i>◈</i>التمويل والتحصيل</button>
+<button class="nav" data-v="tr"><i>◎</i>الخزنة</button>
+<button class="nav" data-v="inv"><i>◉</i>المستثمرون</button>
+<button class="nav" data-v="rep"><i>▥</i>التقارير والكشوف</button>
+<div class="me">المسؤول: <bdi>Mohamed Salman</bdi></div>
+</aside>
+<main>
+
+<section class="view" id="home">
+<div class="hero">
+  <div>
+    <h1>أهلاً بك يا <bdi>Mohamed Salman</bdi></h1>
+    <p>مسؤول النظام · حفظ تلقائي دائم في المتصفح + نسخ احتياطي واستعادة</p>
+  </div>
+  <div class="save-badge" id="save-status">✓ الحفظ التلقائي مفعل</div>
+</div>
+<div class="grid" id="home-kpis"></div>
+<div class="card wrap">
+  <h2>من أين تأتي أرباح المكتب</h2>
+  <div id="home-profit-tbl"></div>
+</div>
+<div class="two">
+  <div class="card">
+    <h2>المستحق والمحصّل من بداية التشغيل</h2>
+    <div class="bars" id="bars"></div>
+    <div class="note">الرمادي: المستحق · الأخضر: المحصّل</div>
+  </div>
+  <div class="card">
+    <h2>توزيع رأس المال</h2>
+    <div id="cap"></div>
+  </div>
+</div>
+<div class="card">
+  <h2>النسخ الاحتياطي وإدارة البيانات</h2>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <button class="btn" id="btn-export">⬇ تحميل نسخة احتياطية (JSON)</button>
+    <label class="btn sec" style="cursor:pointer">
+      ⬆ استعادة نسخة احتياطية
+      <input type="file" id="file-import" accept=".json,application/json" style="display:none">
+    </label>
+    <button class="btn del" id="btn-reset-all">تفريغ كل البيانات (إعادة ضبط)</button>
+  </div>
+  <p class="note" id="backup-msg">كل إضافة أو تعديل أو سداد أو حذف يُحفظ تلقائياً في هذا المتصفح، ويمكنك تنزيل نسخة احتياطية في أي وقت لحفظها على جهازك أو Google Drive.</p>
+</div>
+</section>
+
+<section class="view" id="fin">
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button class="btn sec on" data-v="fin">سجل التمويلات</button>
+    <button class="btn sec" data-v="col">التحصيل</button>
+    <button class="btn sec" data-v="late">المتأخرات</button>
+  </div>
+  <div class="top">
+    <h2>سجل التمويلات</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <select id="f-mon">
+        <option value="all">كل الشهور (السجل الكامل)</option>
+        <option value="01">يناير</option>
+        <option value="02">فبراير</option>
+        <option value="03">مارس</option>
+        <option value="04">أبريل</option>
+        <option value="05">مايو</option>
+        <option value="06">يونيو</option>
+        <option value="07">يوليو</option>
+        <option value="08">أغسطس</option>
+        <option value="09">سبتمبر</option>
+        <option value="10">أكتوبر</option>
+        <option value="11">نوفمبر</option>
+        <option value="12">ديسمبر</option>
+      </select>
+      <select id="f-src-filter"></select>
+      <button class="btn" id="f-new">+ تمويل جديد</button>
+    </div>
+  </div>
+  <div class="card" id="f-form" style="display:none">
+    <h2>تمويل جديد</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <select id="f-name"></select>
+      <input id="f-amt" type="number" placeholder="المبلغ">
+      <select id="f-src"></select>
+      <input type="date" id="f-date">
+    </div>
+    <p id="f-prev" class="note"></p>
+    <button class="btn" id="f-save">حفظ في السجل</button>
+  </div>
+  <div class="note" id="f-ok" style="color:var(--ok);font-size:14px"></div>
+  <div class="card wrap" id="t-fin"></div>
+  <div class="note">يمكنك حذف أي عملية تمويل من زر (حذف) في نفس الصف ليتم تحديث الأرصدة وحفظ التغيير تلقائياً · العائد = المبلغ × 30% · الاستحقاق يوم 27 من شهر الصرف</div>
+</section>
+
+<section class="view" id="col">
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button class="btn sec" data-v="fin">سجل التمويلات</button>
+    <button class="btn sec on" data-v="col">التحصيل</button>
+    <button class="btn sec" data-v="late">المتأخرات</button>
+  </div>
+  <div class="top"><h2>التحصيل</h2></div>
+  <div class="card wrap" id="t-col"></div>
+</section>
+
+<section class="view" id="late">
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button class="btn sec" data-v="fin">سجل التمويلات</button>
+    <button class="btn sec" data-v="col">التحصيل</button>
+    <button class="btn sec on" data-v="late">المتأخرات</button>
+  </div>
+  <div class="top"><h2>المتأخرات</h2></div>
+  <div class="card wrap" id="t-late"></div>
+  <div class="note">أي تمويل لم يُسدد بعد يوم 27 ينتقل هنا تلقائياً</div>
+</section>
+
+<section class="view" id="inv">
+  <div class="top">
+    <h2>المستثمرون</h2>
+    <button class="btn" id="i-new">+ مستثمر جديد</button>
+  </div>
+  <div class="card" id="i-form" style="display:none">
+    <h2>إضافة مستثمر جديد</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="i-name" placeholder="اسم المستثمر">
+      <input id="i-cap" type="number" placeholder="رأس المال المودع">
+      <input id="i-pct" type="number" placeholder="نسبته من الـ 30% (مثال 40)">
+    </div>
+    <br>
+    <button class="btn" id="i-save">حفظ المستثمر</button>
+  </div>
+  <div class="inv" id="invs"></div>
+  <div class="note">المكتب له صندوقه المستقل (رأس مال المكتب) ولا يُدرج كفرد في قائمة المستثمرين · ويمكنك حذف أي مستثمر من زر (حذف).</div>
+</section>
+
+<section class="view" id="stm">
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button class="btn sec" data-v="rep">التقارير</button>
+    <button class="btn sec on" data-v="stm">كشوف الحساب</button>
+  </div>
+  <div class="top">
+    <h2>كشوف الحساب</h2>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <button class="btn sec" id="s0">العملاء</button>
+      <button class="btn sec" id="s1">المستثمرون</button>
+      <button class="btn sec" id="s2">أرباح الشركة</button>
+      <select id="stm-pick" style="display:none"></select>
+      <span style="width:10px"></span>
+      <button class="btn sec on" id="b1">مجمع</button>
+      <button class="btn sec" id="b2">تفصيلي</button>
+    </div>
+  </div>
+  <div class="card wrap" id="t-stm"></div>
+</section>
+
+<section class="view" id="tr">
+  <div class="top">
+    <h2>الخزنة</h2>
+    <button class="btn" id="t-new">+ حركة جديدة</button>
+  </div>
+  <div class="card" id="t-form" style="display:none">
+    <h2>حركة جديدة في الخزنة</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <select id="t-type">
+        <option>مصروفات</option>
+        <option>إيداع رأس مال المكتب</option>
+        <option>إيداع مستثمر</option>
+        <option>سحب مستثمر</option>
+        <option>سحب أرباح شركة</option>
+      </select>
+      <select id="t-party" style="display:none"></select>
+      <input id="t-amt" type="number" placeholder="المبلغ">
+      <input id="t-note" placeholder="ملاحظة (اختياري)">
+      <input type="date" id="t-date">
+    </div>
+    <br>
+    <button class="btn" id="t-save">حفظ الحركة</button>
+  </div>
+  <div class="grid" id="tr-k"></div>
+  <div class="card wrap">
+    <h2>حركة الخزنة</h2>
+    <div id="t-tr"></div>
+  </div>
+  <div class="card wrap">
+    <h2>المتاح للتمويل لكل مصدر</h2>
+    <div id="t-av"></div>
+    <p class="note">المتاح = رأس المال − التمويل الخارج (غير المسدد) + الأرباح المحصّلة للمصدر.</p>
+  </div>
+  <div class="card wrap">
+    <h2>المركز المالي للشركة</h2>
+    <div id="t-bs"></div>
+  </div>
+  <div class="note">يمكنك حذف أي عملية من حركة الخزنة من زر (حذف) ليتم إعادة احتساب الرصيد والحركات تلقائياً.</div>
+</section>
+
+<section class="view" id="cl">
+  <div class="top">
+    <h2>سجل العملاء</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="c-q" placeholder="بحث بالاسم أو الهوية أو الكود">
+      <button class="btn" id="c-new">+ عميل جديد</button>
+    </div>
+  </div>
+  <div class="card" id="c-form" style="display:none">
+    <h2>عميل جديد</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="c-name" placeholder="الاسم الكامل">
+      <input id="c-id" placeholder="رقم الهوية / الإقامة">
+      <input id="c-ph" placeholder="رقم الجوال">
+      <input id="c-late" type="number" placeholder="مرات تأخر سابقة (إن وجد)">
+    </div>
+    <p class="note">الكود يتولد تلقائياً (C-001 وهكذا)</p>
+    <button class="btn" id="c-save">حفظ العميل</button>
+  </div>
+  <div class="card wrap" id="t-cl"></div>
+  <div class="note">يمكنك حذف أي عميل من زر (حذف) في جدول العملاء.</div>
+</section>
+
+<section class="view" id="rep">
+  <div style="display:flex;gap:6px;margin-bottom:14px">
+    <button class="btn sec on" data-v="rep">التقارير</button>
+    <button class="btn sec" data-v="stm">كشوف الحساب</button>
+  </div>
+  <div class="top">
+    <h2>التقارير</h2>
+    <div>
+      <button class="btn sec on" id="r1">شهري</button>
+      <button class="btn sec" id="r2">سنوي</button>
+    </div>
+  </div>
+  <div class="card wrap" id="t-rep"></div>
+  <div class="card wrap">
+    <h2>التقارير المحفوظة</h2>
+    <div id="saved"></div>
+  </div>
+  <div class="note">التقارير وكشوف الحساب تتحدث تلقائياً حسب البيانات المسجلة حالياً.</div>
+</section>
+
+</main>
+</div>
+
+<script>
+var STORAGE_KEY="FINANCE_OFFICE_TABUK_V2_DATA";
+var fmt=function(n){return Number(n).toLocaleString("en-US")};
+var pill=function(s){var c={"مستحق":"#2F6FDE","مسدد":"#1F8A5B","متأخر":"#C0392B"}[s]||"#62767b";return '<span class="pill" style="--c:'+c+'">'+s+'</span>'};
+var tbl=function(h,r){return "<table><tr>"+h.map(function(x){return "<th>"+x+"</th>"}).join("")+"</tr>"+r.map(function(x){return "<tr>"+x.map(function(y){return "<td>"+y+"</td>"}).join("")+"</tr>"}).join("")+"</table>"};
+
+var officeCap=0;
+var officeProfitDrawn=0;
+var I=[];
+var F=[];
+var C=[];
+var L=[];
+
+function persistData(){
+  try{
+    var payload={
+      officeCap:officeCap,
+      officeProfitDrawn:officeProfitDrawn,
+      I:I,
+      F:F,
+      C:C,
+      L:L,
+      updatedAt:new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(payload));
+    var el=document.getElementById("save-status");
+    if(el){
+      var now=new Date();
+      el.textContent="✓ محفوظ تلقائياً ("+now.toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"})+")";
+    }
+  }catch(err){
+    var el2=document.getElementById("save-status");
+    if(el2)el2.textContent="⚠ تعذر الحفظ في المتصفح";
+  }
+}
+
+function loadSavedData(){
+  try{
+    var raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return;
+    var p=JSON.parse(raw);
+    if(typeof p.officeCap==="number")officeCap=p.officeCap;
+    if(typeof p.officeProfitDrawn==="number")officeProfitDrawn=p.officeProfitDrawn;
+    if(Array.isArray(p.I))I=p.I;
+    if(Array.isArray(p.F))F=p.F;
+    if(Array.isArray(p.C))C=p.C;
+    if(Array.isArray(p.L))L=p.L;
+  }catch(err){}
+}
+
+function getInvObj(n){return I.filter(function(x){return x.name===n})[0]||null}
+function getInvPct(n){var o=getInvObj(n);return o?o.pct:0}
+function getSrcCap(src){if(src==="المكتب")return officeCap;var o=getInvObj(src);return o?o.cap:0}
+function getSrcActiveFin(src){var s=0;F.forEach(function(r){if(r[2]===src&&r[4]!=="مسدد")s+=r[1]});return s}
+function getSrcProfitEarned(src){
+  var p=0;
+  F.forEach(function(r){
+    if(r[2]===src){
+      var g=r[1]*0.3;
+      if(src==="المكتب")p+=g;
+      else p+=g*(1-getInvPct(src));
+    }
+  });
+  return p;
+}
+function getSrcAvail(src){return getSrcCap(src)-getSrcActiveFin(src)+getSrcProfitEarned(src)}
+
+function refreshSourceSelectors(){
+  var fSrc=document.getElementById("f-src");
+  var fFilt=document.getElementById("f-src-filter");
+  var curSrc=fSrc.value;
+  var curFilt=fFilt.value;
+
+  var opts='<option value="المكتب">المكتب</option>'+I.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join("");
+  fSrc.innerHTML=opts;
+  if(curSrc)fSrc.value=curSrc;
+
+  fFilt.innerHTML='<option value="all">كل المصادر</option><option value="المكتب">المكتب فقط</option>'+I.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join("");
+  if(curFilt)fFilt.value=curFilt;
+  if(!curFilt)fFilt.value="all";
+}
+
+function renderAll(skipSave){
+  refreshSourceSelectors();
+  rc();
+  rf();
+  rcol();
+  rlate();
+  rinv();
+  rt();
+  rep(repMode);
+  stm(M);
+  rhome();
+  if(!skipSave)persistData();
+}
+
+function rhome(){
+  var totFin=0,totDue=0,totCol=0,totLate=0,lateCount=0;
+  F.forEach(function(r){
+    var due=r[1]*1.3;
+    var paid=(r[4]==="مسدد")?due:(r[5]||0);
+    var rem=Math.max(0,due-paid);
+    totFin+=r[1];
+    totDue+=due;
+    totCol+=paid;
+    if(r[4]==="متأخر"){totLate+=rem;lateCount++}
+  });
+
+  var offOwnYield=0,offFromInv=0,invShareTot=0,invCapTot=0;
+  I.forEach(function(x){invCapTot+=x.cap});
+  F.forEach(function(r){
+    var g=r[1]*0.3;
+    if(r[2]==="المكتب"){offOwnYield+=g}
+    else{
+      var pct=getInvPct(r[2]);
+      var sh=g*pct;
+      invShareTot+=sh;
+      offFromInv+=(g-sh);
+    }
+  });
+
+  var expTot=0;
+  L.forEach(function(x){if(x[1]==="مصروفات")expTot+=x[4]});
+  var netOfficeProfit=offOwnYield+offFromInv-expTot-officeProfitDrawn;
+
+  var cashIn=0,cashOut=0;
+  L.forEach(function(x){cashIn+=x[3];cashOut+=x[4]});
+  var cashNow=cashIn-cashOut;
+  var totCap=officeCap+invCapTot;
+
+  document.getElementById("home-kpis").innerHTML=[
+    ["fin","#2F6FDE","إجمالي التمويل",fmt(totFin),F.length+" عملية · افتح التمويلات"],
+    ["col","#C8962E","المطلوب تحصيله يوم 27",fmt(totDue),"محصّل "+fmt(totCol)+" · افتح التحصيل"],
+    ["late","#C0392B","المتأخرات",fmt(totLate),lateCount+" متأخر · افتح المتأخرات"],
+    ["rep","#1F8A5B","ربح المكتب",fmt(netOfficeProfit),"من أمواله "+fmt(offOwnYield)+" + من المستثمرين "+fmt(offFromInv)],
+    ["tr","#0E7C86","الخزنة (السيولة المتاحة)",fmt(cashNow),"داخل "+fmt(cashIn)+" − خارج "+fmt(cashOut)],
+    ["inv","#5B6B70","إجمالي رأس المال",fmt(totCap),"المكتب "+fmt(officeCap)+" + المستثمرون "+fmt(invCapTot)],
+    ["inv","#7A4FD0","أرباح المستثمرين",fmt(invShareTot),I.length+" مستثمر · افتح المستثمرين"]
+  ].map(function(k){
+    return '<button class="kpi" data-go="'+k[0]+'" style="--c:'+k[1]+'"><span>'+k[2]+'</span><b>'+k[3]+'</b><em>'+k[4]+'</em></button>';
+  }).join("");
+
+  document.querySelectorAll("#home-kpis [data-go]").forEach(function(e){e.onclick=function(){go(e.dataset.go)}});
+
+  document.getElementById("home-profit-tbl").innerHTML=tbl(
+    ["البند","الحساب","المبلغ"],
+    [
+      ["عائد أموال المكتب","تمويل المكتب × 30%",fmt(offOwnYield)],
+      ["حصة المكتب من أموال المستثمرين","عائد المستثمرين − نصيبهم",fmt(offFromInv)],
+      ["المصروفات ومسحوبات أرباح الشركة","مصروفات + سحب أرباح شركة",fmt(expTot+officeProfitDrawn)],
+      ["<b>ربح المكتب الصافي</b>","","<b>"+fmt(netOfficeProfit)+"</b>"],
+      ["<b>الخزنة الآن</b>","السيولة النقدية الفعلية","<b>"+fmt(cashNow)+"</b>"]
+    ]
+  );
+
+  var bars=[["يناير",0,0],["فبراير",0,0],["مارس",0,0],["أبريل",0,0],["مايو",0,0],["ديسمبر",totDue?100:0,totCol?85:0]];
+  document.getElementById("bars").innerHTML=bars.map(function(b){
+    return '<div><div style="display:flex;align-items:flex-end;gap:3px;height:100%"><u class="d" style="height:'+(b[1]*1.2)+'px;width:20px"></u><u style="height:'+(b[2]*1.2)+'px;width:20px"></u></div>'+b[0]+'</div>';
+  }).join("");
+
+  var capRows=[["المكتب",officeCap,"#C8962E"]].concat(I.map(function(x,idx){return [x.name,x.cap,idx%2===0?"#2F6FDE":"#7A4FD0"]}));
+  var maxBar=Math.max(totCap,1);
+  document.getElementById("cap").innerHTML=capRows.map(function(c){
+    var w=Math.min(100,Math.round((c[1]/maxBar)*100));
+    return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between"><span>'+c[0]+'</span><b>'+fmt(c[1])+'</b></div><div style="height:8px;background:var(--ln);border-radius:5px"><div style="height:8px;border-radius:5px;background:'+c[2]+';width:'+w+'%"></div></div></div>';
+  }).join("");
+}
+
+function cd(n){var c=C.filter(function(x){return x[1]===n})[0];return c?c[0]:"-"}
+function pill2(t,c){return '<span class="pill" style="--c:'+c+'">'+t+'</span>'}
+function rate(n){return n===0?pill2("ملتزم","#1F8A5B"):n===1?pill2("متأخر أحياناً","#C8962E"):pill2("متعثر","#C0392B")}
+function nlOf(n){var c=C.filter(function(x){return x[1]===n})[0],k=c?(c[4]||0):0;F.forEach(function(r){if(r[0]===n&&r[4]==="متأخر")k++});return k}
+
+function deleteClient(idx){
+  var cl=C[idx];
+  if(!cl)return;
+  var name=cl[1];
+  F=F.filter(function(r){return r[0]!==name});
+  C.splice(idx,1);
+  renderAll();
+}
+
+function rc(){
+  var q=document.getElementById("c-q").value.trim();
+  var fl=document.getElementById("f-name"),v=fl.value;
+  fl.innerHTML=C.length?C.map(function(c){return '<option value="'+c[1]+'">'+c[0]+' · '+c[1]+'</option>'}).join(""): '<option value="">أضف عميلاً أولاً</option>';
+  if(v)fl.value=v;
+
+  var R=[];
+  C.forEach(function(c,idx){
+    if(q && c.join(" ").indexOf(q)===-1)return;
+    var f=F.filter(function(r){return r[0]===c[1]}),o=0,late=0,nl=c[4]||0;
+    f.forEach(function(r){
+      var due=r[1]*1.3;
+      var paid=(r[4]==="مسدد")?due:(r[5]||0);
+      if(r[4]!=="مسدد")o+=Math.max(0,due-paid);
+      if(r[4]==="متأخر"){late=1;nl++}
+    });
+    R.push([
+      c[0],
+      "<b>"+c[1]+"</b>",
+      c[2],
+      c[3],
+      f.length,
+      fmt(o),
+      f.length?pill(late?"متأخر":(o?"مستحق":"مسدد")):"لا يوجد تمويل",
+      nl,
+      rate(nl),
+      '<button class="btn sm del" onclick="deleteClient('+idx+')">حذف</button>'
+    ]);
+  });
+  document.getElementById("t-cl").innerHTML=R.length?tbl(["الكود","الاسم","رقم الهوية","الجوال","عدد التمويلات","المتبقي عليه","الحالة","مرات التأخر","التقييم","إجراء"],R):'<p class="note">لا يوجد عملاء مسجلون بعد — اضغط (+ عميل جديد) للبدء.</p>';
+}
+document.getElementById("c-q").oninput=rc;
+document.getElementById("c-new").onclick=function(){var f=document.getElementById("c-form");f.style.display=f.style.display==="none"?"block":"none"};
+document.getElementById("c-save").onclick=function(){
+  var n=document.getElementById("c-name").value.trim(),i=document.getElementById("c-id").value.trim(),p=document.getElementById("c-ph").value.trim();
+  if(!n||!i)return;
+  C.push(["C-"+("00"+(C.length+1)).slice(-3),n,i,p,+document.getElementById("c-late").value||0]);
+  document.getElementById("c-form").style.display="none";
+  document.getElementById("c-name").value="";document.getElementById("c-id").value="";document.getElementById("c-ph").value="";document.getElementById("c-late").value="";
+  renderAll();
+};
+
+function deleteLoan(idx){
+  if(idx<0||idx>=F.length)return;
+  F.splice(idx,1);
+  renderAll();
+}
+
+function rf(){
+  var vMon=document.getElementById("f-mon").value;
+  var vSrc=document.getElementById("f-src-filter").value;
+  var rows=[];
+  F.forEach(function(r,idx){
+    var okMon=(vMon==="all"||r[3].slice(3)===vMon);
+    var okSrc=(vSrc==="all"||r[2]===vSrc);
+    if(okMon&&okSrc){
+      rows.push([
+        cd(r[0]),
+        r[0],
+        fmt(r[1]),
+        fmt(r[1]*0.3),
+        "<b>"+fmt(r[1]*1.3)+"</b>",
+        r[2],
+        r[3],
+        pill(r[4]),
+        '<button class="btn sm del" onclick="deleteLoan('+idx+')">حذف</button>'
+      ]);
+    }
+  });
+  document.getElementById("t-fin").innerHTML=rows.length?tbl(
+    ["الكود","العميل","المبلغ","العائد 30%","المطلوب سداده","المصدر","الاستحقاق","الحالة","إجراء"],
+    rows
+  ):'<p class="note">لا توجد عمليات تمويل مسجلة بعد — اضغط (+ تمويل جديد) لإضافة عملية.</p>';
+}
+
+function nf(){
+  var a=+document.getElementById("f-amt").value||0;
+  var s=document.getElementById("f-src").value;
+  var av=getSrcAvail(s);
+  var k=nlOf(document.getElementById("f-name").value);
+  document.getElementById("f-prev").textContent="العائد 30% = "+fmt(a*0.3)+" · المطلوب سداده = "+fmt(a*1.3)+" · الاستحقاق يوم 27 من نفس شهر الصرف · المتاح من "+s+": "+fmt(av)+(a>av?" ⚠ المبلغ أكبر من المتاح":"")+" · التزام العميل: "+["ملتزم","متأخر أحياناً","متعثر"][Math.min(k,2)];
+}
+document.getElementById("f-amt").oninput=nf;
+document.getElementById("f-name").onchange=nf;
+document.getElementById("f-src").onchange=nf;
+document.getElementById("f-mon").onchange=rf;
+document.getElementById("f-src-filter").onchange=rf;
+document.getElementById("f-new").onclick=function(){var f=document.getElementById("f-form");f.style.display=f.style.display==="none"?"block":"none";nf()};
+document.getElementById("f-save").onclick=function(){
+  var n=document.getElementById("f-name").value,a=+document.getElementById("f-amt").value,d=document.getElementById("f-date").value,sr=document.getElementById("f-src").value;
+  if(!n||!a)return;
+  var av=getSrcAvail(sr),fo=document.getElementById("f-ok");
+  if(a>av){fo.style.color="var(--bad)";fo.textContent="المبلغ أكبر من المتاح من "+sr+" ("+fmt(av)+"). قلل المبلغ أو اختر مصدر آخر.";return}
+  var dtStr=d?(d.slice(8,10)+"/"+d.slice(5,7)):"01/12";
+  var monStr=d?d.slice(5,7):"12";
+  L.push([dtStr,"صرف تمويل","صرف تمويل · "+n+" ("+sr+")",0,a]);
+  F.push([n,a,sr,"27/"+monStr,"مستحق",0]);
+  document.getElementById("f-form").style.display="none";
+  document.getElementById("f-amt").value="";
+  fo.style.color="var(--ok)";
+  fo.textContent="تم حفظ تمويل "+n+" وتحديث الخزنة والمتاح تلقائياً.";
+  renderAll();
+};
+
+function payLoan(idx){
+  var r=F[idx];
+  if(!r)return;
+  var due=r[1]*1.3;
+  r[5]=due;
+  r[4]="مسدد";
+  L.push(["27/"+r[3].slice(3),"تحصيل تمويل","تحصيل تمويل · "+r[0],due,0]);
+  renderAll();
+}
+
+function rcol(){
+  var rows=[];
+  F.forEach(function(r,idx){
+    var due=r[1]*1.3;
+    var actBtn=(r[4]!=="مسدد")?'<button class="btn sec sm" onclick="payLoan('+idx+')">تسجيل سداد</button>':"مكتمل";
+    rows.push([r[0],fmt(due),r[3],pill(r[4]),actBtn,'<button class="btn sm del" onclick="deleteLoan('+idx+')">حذف</button>']);
+  });
+  document.getElementById("t-col").innerHTML=rows.length?tbl(["العميل","المطلوب","الاستحقاق","الحالة","سداد","إجراء"],rows):'<p class="note">لا توجد عمليات تحصيل بعد.</p>';
+}
+
+function rlate(){
+  var rows=[];
+  F.forEach(function(r,idx){
+    if(r[4]==="متأخر"){
+      var due=r[1]*1.3;
+      var rem=Math.max(0,due-(r[5]||0));
+      rows.push([r[0],fmt(r[1]),fmt(rem),pill("متأخر"),'<button class="btn sm del" onclick="deleteLoan('+idx+')">حذف</button>']);
+    }
+  });
+  document.getElementById("t-late").innerHTML=rows.length?tbl(["العميل","الأصل","المتبقي","الحالة","إجراء"],rows):'<p class="note">لا توجد تمويلات متأخرة حالياً.</p>';
+}
+
+function deleteInvestor(idx){
+  if(idx<0||idx>=I.length)return;
+  I.splice(idx,1);
+  renderAll();
+}
+
+document.getElementById("i-new").onclick=function(){var f=document.getElementById("i-form");f.style.display=f.style.display==="none"?"block":"none"};
+document.getElementById("i-save").onclick=function(){
+  var nm=document.getElementById("i-name").value.trim(),cap=+document.getElementById("i-cap").value||0,pct=(+document.getElementById("i-pct").value||0)/100;
+  if(!nm||!cap)return;
+  I.push({name:nm,cap:cap,pct:pct,paid:0});
+  L.push(["01/12","إيداع مستثمر","إيداع رأس مال · "+nm,cap,0]);
+  document.getElementById("i-name").value="";document.getElementById("i-cap").value="";document.getElementById("i-pct").value="";
+  document.getElementById("i-form").style.display="none";
+  renderAll();
+};
+
+function rinv(){
+  if(!I.length){
+    document.getElementById("invs").innerHTML='<div class="card"><p class="note">لا يوجد مستثمرون مسجلون بعد — اضغط (+ مستثمر جديد) لإضافة مستثمر.</p></div>';
+    return;
+  }
+  document.getElementById("invs").innerHTML=I.map(function(x,idx){
+    var earned=0;
+    F.forEach(function(r){if(r[2]===x.name)earned+=r[1]*0.3*x.pct});
+    return '<div class="card"><div class="inv-head"><b>'+x.name+'</b><button class="btn sm del" onclick="deleteInvestor('+idx+')">حذف</button></div><div class="note">رأس المال '+fmt(x.cap)+' ر.س</div><div class="note">نسبته من الـ30%: '+Math.round(x.pct*100)+'% · المتاح: '+fmt(getSrcAvail(x.name))+'</div><h2 style="margin:10px 0 0;color:var(--ok)">'+fmt(earned)+' ر.س / شهر</h2></div>';
+  }).join("");
+}
+
+function updatePartyField(){
+  var tp=document.getElementById("t-type").value;
+  var sel=document.getElementById("t-party");
+  if(tp==="إيداع مستثمر"||tp==="سحب مستثمر"){
+    sel.style.display="inline-block";
+    sel.innerHTML=I.length?I.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join(""): '<option value="">أضف مستثمراً أولاً</option>';
+  }else{
+    sel.style.display="none";
+  }
+}
+document.getElementById("t-type").onchange=updatePartyField;
+document.getElementById("t-new").onclick=function(){
+  var f=document.getElementById("t-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+  updatePartyField();
+};
+
+document.getElementById("t-save").onclick=function(){
+  var tp=document.getElementById("t-type").value;
+  var amt=+document.getElementById("t-amt").value||0;
+  var note=document.getElementById("t-note").value.trim();
+  var d=document.getElementById("t-date").value;
+  var party=document.getElementById("t-party").value;
+  if(!amt)return;
+  var dtStr=d?(d.slice(8,10)+"/"+d.slice(5,7)):"01/12";
+
+  if(tp==="إيداع رأس مال المكتب"){
+    officeCap+=amt;
+    L.push([dtStr,tp,note||"إيداع رأس مال المكتب",amt,0,"office_cap",amt]);
+  }else if(tp==="إيداع مستثمر"){
+    var invObj=getInvObj(party);
+    if(invObj)invObj.cap+=amt;
+    L.push([dtStr,tp,(party?party+" · ":"")+(note||"إيداع رأس مال مستثمر"),amt,0,"inv_cap",amt,party]);
+  }else if(tp==="سحب مستثمر"){
+    var invObj2=getInvObj(party);
+    if(invObj2)invObj2.paid+=amt;
+    L.push([dtStr,tp,(party?party+" · ":"")+(note||"سحب مستثمر"),0,amt,"inv_pay",amt,party]);
+  }else if(tp==="سحب أرباح شركة"){
+    officeProfitDrawn+=amt;
+    L.push([dtStr,tp,note||"سحب أرباح شركة",0,amt,"office_draw",amt]);
+  }else{
+    L.push([dtStr,"مصروفات",note||"مصروفات تشغيلية",0,amt,"exp",amt]);
+  }
+
+  document.getElementById("t-amt").value="";
+  document.getElementById("t-note").value="";
+  document.getElementById("t-form").style.display="none";
+  renderAll();
+};
+
+function deleteTreasuryEntry(idx){
+  var x=L[idx];
+  if(!x)return;
+  if(x[5]==="office_cap")officeCap=Math.max(0,officeCap-(x[6]||0));
+  else if(x[5]==="inv_cap"){var o=getInvObj(x[7]);if(o)o.cap=Math.max(0,o.cap-(x[6]||0))}
+  else if(x[5]==="inv_pay"){var o2=getInvObj(x[7]);if(o2)o2.paid=Math.max(0,(o2.paid||0)-(x[6]||0))}
+  else if(x[5]==="office_draw")officeProfitDrawn=Math.max(0,officeProfitDrawn-(x[6]||0));
+  L.splice(idx,1);
+  renderAll();
+}
+
+function rt(){
+  var b=0,i=0,o=0,invCapTot=0;
+  I.forEach(function(x){invCapTot+=x.cap});
+  var capTot=officeCap+invCapTot;
+
+  var R=[];
+  L.forEach(function(x,idx){
+    b+=(x[3]||0)-(x[4]||0);
+    i+=(x[3]||0);
+    o+=(x[4]||0);
+    R.push([
+      x[0],
+      "<b>"+x[1]+"</b>",
+      x[2],
+      x[3]?'<span style="color:var(--ok)">'+fmt(x[3])+'</span>':"-",
+      x[4]?'<span style="color:var(--bad)">'+fmt(x[4])+'</span>':"-",
+      "<b>"+fmt(b)+"</b>",
+      '<button class="btn sm del" onclick="deleteTreasuryEntry('+idx+')">حذف</button>'
+    ]);
+  });
+
+  document.getElementById("t-tr").innerHTML=R.length?tbl(["التاريخ","نوع الحركة","البيان","داخل","خارج","الرصيد","إجراء"],R):'<p class="note">لا توجد حركات في الخزنة بعد — اضغط (+ حركة جديدة) للبدء.</p>';
+
+  document.getElementById("tr-k").innerHTML=[
+    ["رصيد أول الشهر",0,"#5B6B70"],
+    ["داخل الخزنة",i,"#1F8A5B"],
+    ["خارج الخزنة",o,"#C0392B"],
+    ["رصيد الخزنة الآن",b,"#0E7C86"]
+  ].map(function(k){return '<div class="kpi" style="--c:'+k[2]+';cursor:default"><span>'+k[0]+'</span><b>'+fmt(k[1])+'</b></div>'}).join("");
+
+  var srcs=["المكتب"].concat(I.map(function(x){return x.name}));
+  var totAv=0;
+  var avRows=srcs.map(function(s){
+    var c0=getSrcCap(s),af=getSrcActiveFin(s),pe=getSrcProfitEarned(s),av=c0-af+pe;
+    totAv+=av;
+    return [s,fmt(c0),fmt(af),pe?fmt(pe):"-","<b>"+fmt(av)+"</b>"];
+  });
+  avRows.push(["<b>الإجمالي</b>","","","", "<b>"+fmt(totAv)+"</b>"]);
+  document.getElementById("t-av").innerHTML=tbl(["المصدر","رأس المال","تمويل خارج (لم يُسدد)","أرباح محصّلة","المتاح للتمويل"],avRows);
+
+  var rv=0,offOwn=0,offInv=0,invEarnedTot=0,invPaidTot=0,expTot=0;
+  F.forEach(function(r){
+    var due=r[1]*1.3;
+    var paid=(r[4]==="مسدد")?due:(r[5]||0);
+    if(r[4]!=="مسدد")rv+=Math.max(0,due-paid);
+    var g=r[1]*0.3;
+    if(r[2]==="المكتب")offOwn+=g;
+    else{
+      var sh=g*getInvPct(r[2]);
+      invEarnedTot+=sh;
+      offInv+=(g-sh);
+    }
+  });
+  I.forEach(function(x){invPaidTot+=(x.paid||0)});
+  L.forEach(function(x){if(x[1]==="مصروفات")expTot+=x[4]});
+
+  var netProfit=offOwn+offInv-expTot-officeProfitDrawn;
+  var lbUnpaidInv=Math.max(0,invEarnedTot-invPaidTot);
+
+  document.getElementById("t-bs").innerHTML=tbl(
+    ["الأصول","المبلغ","حقوق الملكية والالتزامات","المبلغ"],
+    [
+      ["الخزنة (نقد)",fmt(b),"رأس المال (المكتب + المستثمرين)",fmt(capTot)],
+      ["مستحق على العملاء",fmt(rv),"ربح المكتب الصافي",fmt(netProfit)],
+      ["","","مستحق للمستثمرين (لم يُدفع)",fmt(lbUnpaidInv)],
+      ["<b>الإجمالي</b>","<b>"+fmt(b+rv)+"</b>","<b>الإجمالي</b>","<b>"+fmt(capTot+netProfit+lbUnpaidInv)+"</b>"]
+    ]
+  );
+}
+
+var S=0,M=1,repMode=1;
+function refreshStmPick(){
+  var pick=document.getElementById("stm-pick");
+  if(S===0){
+    pick.style.display="inline-block";
+    pick.innerHTML='<option value="all">كل العملاء</option>'+C.map(function(c){return '<option value="'+c[1]+'">'+c[1]+'</option>'}).join("");
+  }else if(S===1){
+    pick.style.display="inline-block";
+    pick.innerHTML='<option value="all">كل المستثمرين</option>'+I.map(function(x){return '<option value="'+x.name+'">'+x.name+'</option>'}).join("");
+  }else{
+    pick.style.display="none";
+  }
+}
+document.getElementById("stm-pick").onchange=function(){stm(M)};
+
+function stm(m){
+  M=m;
+  var s=S||0,el=document.getElementById("t-stm"),pickVal=document.getElementById("stm-pick").value;
+  [0,1,2].forEach(function(i){document.getElementById("s"+i).className="btn sec"+(s===i?" on":"")});
+  document.getElementById("b1").className="btn sec"+(m?" on":"");
+  document.getElementById("b2").className="btn sec"+(m?"":" on");
+
+  if(s===0){
+    var list=pickVal&&pickVal!=="all"?C.filter(function(c){return c[1]===pickVal}):C;
+    if(!list.length){el.innerHTML='<p class="note">لا يوجد عملاء مسجلون بعد.</p>';return}
+    if(m){
+      var rows=list.map(function(c){
+        var tf=0,tg=0,tp=0,tr=0;
+        F.forEach(function(r){
+          if(r[0]===c[1]){
+            var g=r[1]*0.3,due=r[1]+g,paid=(r[4]==="مسدد")?due:(r[5]||0);
+            tf+=r[1];tg+=g;tp+=paid;tr+=Math.max(0,due-paid);
+          }
+        });
+        return [c[1],fmt(tf),fmt(tg),fmt(tp),tr>0?"<b style='color:var(--bad)'>"+fmt(tr)+"</b>":"<b>0</b>"];
+      });
+      el.innerHTML=tbl(["العميل","إجمالي التمويل","إجمالي العائد","المسدد","الرصيد"],rows);
+    }else{
+      var targetClient=list[0]?list[0][1]:"";
+      var det=[];
+      F.forEach(function(r){
+        if(r[0]===targetClient){
+          var g=r[1]*0.3,due=r[1]+g,paid=(r[4]==="مسدد")?due:(r[5]||0);
+          det.push([r[3],"صرف تمويل ("+r[2]+")",fmt(r[1]),"-",fmt(r[1])]);
+          det.push([r[3],"عائد 30%",fmt(g),"-",fmt(due)]);
+          if(paid>0)det.push([r[3],"سداد",fmt(0),fmt(paid),fmt(Math.max(0,due-paid))]);
+        }
+      });
+      el.innerHTML="<b>كشف تفصيلي: "+targetClient+"</b>"+tbl(["التاريخ","البيان","مدين","دائن","الرصيد"],det.length?det:[["-","لا توجد حركات","-","-","0"]]);
+    }
+    return;
+  }
+
+  if(s===1){
+    var invList=pickVal&&pickVal!=="all"?I.filter(function(x){return x.name===pickVal}):I;
+    if(!invList.length){el.innerHTML='<p class="note">لا يوجد مستثمرون مسجلون بعد.</p>';return}
+    if(m){
+      var rowsI=invList.map(function(x){
+        var yd=0,sh=0;
+        F.forEach(function(r){if(r[2]===x.name){var g=r[1]*0.3;yd+=g;sh+=g*x.pct}});
+        var rem=Math.max(0,sh-(x.paid||0));
+        return [x.name,fmt(x.cap),Math.round(x.pct*100)+"%",fmt(yd),fmt(sh),fmt(x.paid||0),"<b>"+fmt(rem)+"</b>"];
+      });
+      el.innerHTML=tbl(["المستثمر","رأس المال","نسبته من الـ30%","عائد أمواله (المتوقع)","نصيبه","المدفوع له","المتبقي له"],rowsI);
+    }else{
+      var inv0=invList[0]||{name:"",cap:0,pct:0,paid:0};
+      var sh0=0;
+      F.forEach(function(r){if(r[2]===inv0.name)sh0+=r[1]*0.3*inv0.pct});
+      el.innerHTML="<b>كشف تفصيلي: "+inv0.name+"</b>"+tbl(
+        ["التاريخ","البيان","له","مدفوع","رصيده لدى المكتب"],
+        [
+          ["-","رأس المال المودع",fmt(inv0.cap),"-",fmt(inv0.cap)],
+          ["-","نصيبه من العائد",fmt(sh0),"-",fmt(inv0.cap+sh0)],
+          ["-","المدفوع له","-",fmt(inv0.paid||0),"<b>"+fmt(inv0.cap+sh0-(inv0.paid||0))+"</b>"]
+        ]
+      );
+    }
+    return;
+  }
+
+  var T=[0,0,0];
+  var R=F.map(function(r){
+    var g=r[1]*0.3,iShare=(r[2]==="المكتب")?0:(g*getInvPct(r[2])),oShare=g-iShare;
+    T[0]+=g;T[1]+=iShare;T[2]+=oShare;
+    return [r[0],r[2],fmt(g),fmt(iShare),"<b>"+fmt(oShare)+"</b>"];
+  });
+  R.push(["<b>الإجمالي</b>","","<b>"+fmt(T[0])+"</b>","<b>"+fmt(T[1])+"</b>","<b>"+fmt(T[2])+"</b>"]);
+  el.innerHTML=m?tbl(
+    ["البند","المبلغ"],
+    [
+      ["<b>إجمالي أرباح الشركة (العوائد)</b>","<b>"+fmt(T[0])+"</b>"],
+      ["نصيب المستثمرين",fmt(T[1])],
+      ["<b>ربح المكتب من العوائد</b>","<b>"+fmt(T[2])+"</b>"],
+      ["رأس مال المكتب",fmt(officeCap)]
+    ]
+  ):"<b>كشف تفصيلي لأرباح الشركة</b>"+tbl(["العميل","المصدر","العائد 30%","نصيب المستثمر","ربح المكتب"],R);
+}
+
+[0,1,2].forEach(function(i){
+  document.getElementById("s"+i).onclick=function(){S=i;refreshStmPick();stm(M)};
+});
+document.getElementById("b1").onclick=function(){stm(1)};
+document.getElementById("b2").onclick=function(){stm(0)};
+
+function rep(m){
+  repMode=m;
+  document.getElementById("r1").className="btn sec"+(m?" on":"");
+  document.getElementById("r2").className="btn sec"+(m?"":" on");
+  var totFin=0,totGain=0,totCol=0,totLate=0,invShare=0;
+  F.forEach(function(r){
+    var g=r[1]*0.3,due=r[1]+g,paid=(r[4]==="مسدد")?due:(r[5]||0);
+    totFin+=r[1];totGain+=g;totCol+=paid;
+    if(r[4]!=="مسدد")totLate+=Math.max(0,due-paid);
+    if(r[2]!=="المكتب")invShare+=g*getInvPct(r[2]);
+  });
+  var offProfit=totGain-invShare;
+  var cashIn=0,cashOut=0;
+  L.forEach(function(x){cashIn+=x[3];cashOut+=x[4]});
+
+  document.getElementById("t-rep").innerHTML=m
+    ?"<b>التقرير الشهري</b>"+tbl(["البند","المبلغ"],[
+      ["إجمالي التمويل",fmt(totFin)],
+      ["العائد المتوقع 30%",fmt(totGain)],
+      ["المحصّل",fmt(totCol)],
+      ["المتأخرات",fmt(totLate)],
+      ["نصيب المستثمرين",fmt(invShare)],
+      ["<b>ربح المكتب</b>","<b>"+fmt(offProfit)+"</b>"],
+      ["داخل الخزنة",fmt(cashIn)],
+      ["خارج الخزنة",fmt(cashOut)],
+      ["<b>رصيد الخزنة الآن</b>","<b>"+fmt(cashIn-cashOut)+"</b>"]
+    ])
+    :"<b>التقرير السنوي</b>"+tbl(["الفترة","التمويل","العائد","نصيب المستثمرين","ربح المكتب","رصيد الخزنة"],[
+      ["الفترة الحالية",fmt(totFin),fmt(totGain),fmt(invShare),fmt(offProfit),fmt(cashIn-cashOut)],
+      ["<b>الإجمالي</b>","<b>"+fmt(totFin)+"</b>","<b>"+fmt(totGain)+"</b>","<b>"+fmt(invShare)+"</b>","<b>"+fmt(offProfit)+"</b>","<b>"+fmt(cashIn-cashOut)+"</b>"]
+    ]);
+}
+document.getElementById("r1").onclick=function(){rep(1)};
+document.getElementById("r2").onclick=function(){rep(0)};
+document.getElementById("saved").innerHTML=tbl(["التقرير","الحالة"],[
+  ["كشف حساب الشركة","محفوظ تلقائياً في المتصفح ومحدّث مع العمليات"],
+  ["كشف حساب المستثمرين","محفوظ تلقائياً في المتصفح ومحدّث مع العمليات"]
+]);
+
+document.getElementById("btn-export").onclick=function(){
+  var dataStr=JSON.stringify({
+    officeCap:officeCap,
+    officeProfitDrawn:officeProfitDrawn,
+    I:I,
+    F:F,
+    C:C,
+    L:L,
+    exportedAt:new Date().toISOString()
+  },null,2);
+  var blob=new Blob([dataStr],{type:"application/json"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url;
+  a.download="نسخة_احتياطية_التمويل_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById("backup-msg").textContent="✓ تم تنزيل ملف النسخة الاحتياطية على جهازك.";
+};
+
+document.getElementById("file-import").onchange=function(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var p=JSON.parse(ev.target.result);
+      officeCap=Number(p.officeCap)||0;
+      officeProfitDrawn=Number(p.officeProfitDrawn)||0;
+      I=Array.isArray(p.I)?p.I:[];
+      F=Array.isArray(p.F)?p.F:[];
+      C=Array.isArray(p.C)?p.C:[];
+      L=Array.isArray(p.L)?p.L:[];
+      renderAll();
+      document.getElementById("backup-msg").textContent="✓ تم استعادة النسخة الاحتياطية وحفظها بنجاح.";
+    }catch(err){
+      document.getElementById("backup-msg").textContent="⚠ ملف النسخة الاحتياطية غير صالح.";
+    }
+  };
+  reader.readAsText(file);
+  e.target.value="";
+};
+
+document.getElementById("btn-reset-all").onclick=function(){
+  if(!confirm("هل أنت متأكد من تفريغ جميع العملاء والتمويلات والمستثمرين وحركات الخزنة؟"))return;
+  officeCap=0;
+  officeProfitDrawn=0;
+  I=[];
+  F=[];
+  C=[];
+  L=[];
+  renderAll();
+  document.getElementById("backup-msg").textContent="✓ تم تفريغ جميع البيانات وإعادة ضبط النظام.";
+};
+
+function go(v){
+  document.querySelectorAll(".view").forEach(function(e){e.classList.toggle("on",e.id===v)});
+  document.querySelectorAll(".nav").forEach(function(e){e.classList.toggle("on",e.dataset.v===({col:"fin",late:"fin",stm:"rep"}[v]||v))});
+  if(v==="stm")refreshStmPick();
+  if(location.hash!=="#"+v)location.hash=v;
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("[data-v]").forEach(function(e){e.onclick=function(){go(e.dataset.v)}});
+document.querySelectorAll("[data-go]").forEach(function(e){e.onclick=function(){go(e.dataset.go)}});
+function fromHash(){var v=location.hash.slice(1);go(document.getElementById(v)?v:"home")}
+window.addEventListener("hashchange",fromHash);
+
+loadSavedData();
+renderAll(true);
+fromHash();
+</script>
+</body>
+</html>
