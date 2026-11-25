@@ -1,0 +1,2833 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>نظام مكتب التمويل</title>
+
+<style>
+
+:root{
+
+  --bg:#f4f5f7;
+
+  --card:#ffffff;
+
+  --ink:#18212f;
+
+  --mut:#667085;
+
+  --line:#e4e7ec;
+
+  --nav:#16233b;
+
+  --pri:#16233b;
+
+  --onpri:#ffffff;
+
+  --gold:#c8963e;
+
+  --ok:#188a5b;
+
+  --bad:#c0392b;
+
+  --b1:#16233b;
+
+  color-scheme:light;
+
+}
+
+@media(prefers-color-scheme:dark){
+
+  :root{
+
+    --bg:#0c1320;
+
+    --card:#141d2e;
+
+    --ink:#e8edf6;
+
+    --mut:#93a0b8;
+
+    --line:#25314a;
+
+    --nav:#0a101c;
+
+    --pri:#d9a954;
+
+    --onpri:#1a1405;
+
+    --gold:#e0b35a;
+
+    --ok:#4cc38a;
+
+    --bad:#f08a7c;
+
+    --b1:#7d97e6;
+
+    color-scheme:dark;
+
+  }
+
+}
+
+*{box-sizing:border-box}
+
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;-webkit-tap-highlight-color:transparent}
+
+button,input,select,textarea{font:inherit;color:inherit}
+
+h2,h3{margin:0;line-height:1.35}
+
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+
+textarea{font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;direction:ltr;resize:vertical}
+
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+label{display:block;font-size:13px;color:var(--mut);margin:0 0 4px}
+
+.btn{background:var(--pri);color:var(--onpri);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px}
+
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.btn.sm{padding:6px 12px;font-size:13px;min-height:34px}
+
+.btn.ghost{background:transparent;color:inherit;border:1px solid var(--line);font-weight:500}
+
+.btn.del{background:transparent;color:var(--bad);border:1px solid var(--line);font-weight:600}
+
+.login{min-height:100dvh;display:grid;place-items:center;padding:18px}
+
+.lbox{width:100%;max-width:420px;background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.06)}
+
+.lh{background:var(--nav);color:#fff;padding:22px}
+
+.lh h2{font-size:20px}
+
+.lh span{color:#aab6cc;font-size:13px;display:block;margin-top:4px}
+
+.lb{padding:20px 22px}
+
+.lb .fg{margin-bottom:13px}
+
+.note{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--mut);line-height:1.6}
+
+.shell{display:flex;min-height:100dvh}
+
+.side{position:fixed;top:0;bottom:0;inset-inline-start:0;width:240px;background:var(--nav);color:#cfd6e4;padding:calc(18px + env(safe-area-inset-top,0px)) 0 calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;transform:translateX(100%);transition:transform .2s ease;z-index:30;overflow-y:auto}
+
+.side.open{transform:translateX(0)}
+
+.brand{padding:0 20px 16px;margin-bottom:8px;display:flex;flex-direction:column;border-bottom:1px solid rgba(255,255,255,.1)}
+
+.brand b{color:#fff;font-size:17px}
+
+.brand span{font-size:12px;color:#93a0b8}
+
+.side>button{background:none;border:0;text-align:start;padding:12px 20px;color:inherit;font-size:15px;cursor:pointer;min-height:44px}
+
+.side>button.on{color:#fff;font-weight:700;background:rgba(255,255,255,.09);box-shadow:inset -3px 0 0 var(--gold)}
+
+.who{margin-top:auto;padding:14px 20px 0;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+
+.who span{font-size:12.5px;color:#93a0b8}
+
+.who .btn.ghost{color:#fff;border-color:rgba(255,255,255,.25)}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:none}
+
+.ov.show{display:block}
+
+main{flex:1;min-width:0;padding:14px 14px calc(36px + env(safe-area-inset-bottom,0px))}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+
+.top-r{display:flex;align-items:center;gap:8px}
+
+.top h2{font-size:20px}
+
+.dt{display:none;color:var(--mut);font-size:13px}
+
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--mut)}
+
+.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+
+.pill.ok .dot{background:var(--ok)}
+
+.pill.err .dot{background:var(--bad)}
+
+.hero{background:var(--nav);color:#fff;border-radius:18px;padding:20px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:16px 28px;justify-content:space-between;align-items:flex-end}
+
+.hero small{color:#aab6cc;font-size:13px;display:block}
+
+.big{font-size:32px;font-weight:700;color:var(--gold);line-height:1.2}
+
+.hs{display:flex;gap:24px;flex-wrap:wrap}
+
+.hs b{font-size:16.5px;display:block}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-bottom:14px}
+
+.t{text-align:start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}
+
+.t small{display:block;color:var(--mut);font-size:12.5px}
+
+.t b{display:block;font-size:19px;margin-top:3px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+
+.card h3{font-size:16px;margin-bottom:12px}
+
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}
+
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+
+.item{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+
+.item:last-child{border:0}
+
+.im{display:flex;flex-direction:column;min-width:0}
+
+.im span,.is small{color:var(--mut);font-size:12.5px}
+
+.is{display:flex;flex-direction:column;align-items:flex-end}
+
+.is b{font-size:15px}
+
+.ia{flex-basis:100%;display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+
+.tag{padding:1px 10px;border-radius:99px;font-size:12px;border:1px solid currentColor;margin-top:3px}
+
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--gold)}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px;align-items:center}
+
+.chip{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 14px;cursor:pointer;color:var(--mut);font-size:13.5px;min-height:34px}
+
+.chip.on{background:var(--pri);color:var(--onpri);border-color:var(--pri);font-weight:700}
+
+.bar{height:7px;background:var(--line);border-radius:9px;overflow:hidden;margin:5px 0 12px}
+
+.bar i{display:block;height:100%;background:var(--gold)}
+
+.sp{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;flex-wrap:wrap}
+
+.lg{display:flex;gap:14px;font-size:12.5px;color:var(--mut);margin-bottom:8px}
+
+.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px}
+
+.empty{color:var(--mut);padding:10px 0}
+
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));inset-inline:12px;margin:auto;max-width:420px;background:var(--ink);color:var(--bg);padding:11px 14px;border-radius:12px;text-align:center;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+
+th,td{padding:9px 8px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+
+th{color:var(--mut);font-weight:600}
+
+tfoot td{font-weight:700;border-top:2px solid var(--line)}
+
+.rh{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:flex-end}
+
+.rh h3{margin:0;font-size:18px}
+
+.rh span{color:var(--mut);font-size:13px}
+
+.sel{max-width:340px;margin-bottom:12px}
+
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:50;padding:18px}
+
+.dlg[hidden]{display:none}
+
+.dbox{background:var(--card);border-radius:14px;padding:20px;max-width:420px;width:100%;border:1px solid var(--line)}
+
+.dbox p{margin:0 0 14px}
+
+@media(max-width:899px){.two{grid-template-columns:1fr}}
+
+@media(min-width:900px){
+
+  .side{transform:none}
+
+  .menu,.ov,.ov.show{display:none}
+
+  .dt{display:inline}
+
+  main{margin-inline-start:240px;padding:22px 28px 40px;max-width:1180px}
+
+}
+
+@media print{
+
+  .side,.ov,.menu,.noprint,.chips,.sel,.top .dt,.pill{display:none!important}
+
+  main{margin:0!important;padding:0!important;max-width:none!important}
+
+  body{background:#fff;color:#000}
+
+  .card,.t{border-color:#bbb}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<div id="toast" class="toast" hidden></div>
+
+<div id="dlg" class="dlg" hidden></div>
+
+
+
+<script>
+
+const APP_ID = 'tamweel-office-v1';
+
+const FIREBASE_CFG = {
+
+  apiKey: "AIzaSyDqazjjq3-_wdpoMWyVkfYHYoIQRz6-8qo",
+
+  authDomain: "tamweel-office.firebaseapp.com",
+
+  projectId: "tamweel-office",
+
+  storageBucket: "tamweel-office.firebasestorage.app",
+
+  messagingSenderId: "237804833905",
+
+  appId: "1:237804833905:web:c4ed88ce46f0c756f99fd0",
+
+  measurementId: "G-9K8ZSS64S5"
+
+};
+
+
+
+let fb = null, db = null, user = null, unsub = null;
+
+let syncStatus = 'syncing';
+
+let syncText = 'جاري المزامنة...';
+
+
+
+const ROLE = { admin: 'مدير', acc: 'محاسب', view: 'مشاهدة فقط' };
+
+const LB = { dep: 'إيداع', wd: 'سحب', exp: 'مصروف', fin: 'تمويل عميل', pay: 'سداد عميل' };
+
+const TODAY = new Date().toISOString().slice(0, 10);
+
+const MN = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+const DEFC = ['إيجار','إنترنت','كهرباء','مياه','رواتب','دعاية','صيانة','مستلزمات مكتبية','رسوم حكومية','أخرى'];
+
+
+
+function freshState() {
+
+  return {
+
+    cfg: { office: 'مكتب التمويل', rate: 30, due: 27 },
+
+    inv: [],
+
+    cli: [],
+
+    fin: [],
+
+    led: [],
+
+    users: [],
+
+    cats: DEFC.slice(),
+
+    log: []
+
+  };
+
+}
+
+
+
+let S = freshState();
+
+let ME = null;
+
+let TAB = 'home', OPEN = false, Q = '', FS = 'all', LF = 'all';
+
+let RT = 'cli', RC = '', RI = '', RM = TODAY.slice(0, 7), RY = TODAY.slice(0, 4);
+
+let toastTimer;
+
+
+
+const $ = id => document.getElementById(id);
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+
+}[c]));
+
+const money = n => Math.round(Number(n) || 0).toLocaleString('en-US') + ' ر.س';
+
+
+
+function toast(msg) {
+
+  const el = $('toast');
+
+  if (!el) return;
+
+  el.textContent = msg;
+
+  el.hidden = false;
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => { el.hidden = true; }, 3000);
+
+}
+
+
+
+function setSync(state, text) {
+
+  syncStatus = state;
+
+  syncText = text;
+
+  const pill = $('sync-pill');
+
+  if (pill) {
+
+    pill.className = 'pill ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : '');
+
+    const sp = pill.querySelector('span');
+
+    if (sp) sp.textContent = text;
+
+  }
+
+}
+
+
+
+function syncPill() {
+
+  const cls = syncStatus === 'ok' ? 'ok' : syncStatus === 'err' ? 'err' : '';
+
+  return `<div id="sync-pill" class="pill ${cls}"><i class="dot"></i><span>${esc(syncText)}</span></div>`;
+
+}
+
+
+
+function normalize(raw) {
+
+  const base = freshState();
+
+  if (!raw || typeof raw !== 'object') return base;
+
+  const cfg = raw.cfg && typeof raw.cfg === 'object' ? {
+
+    office: String(raw.cfg.office || 'مكتب التمويل'),
+
+    rate: Number(raw.cfg.rate) > 0 ? Number(raw.cfg.rate) : 30,
+
+    due: Number(raw.cfg.due) >= 1 && Number(raw.cfg.due) <= 28 ? Number(raw.cfg.due) : 27
+
+  } : base.cfg;
+
+
+
+  const inv = Array.isArray(raw.inv) ? raw.inv.map(i => ({
+
+    id: String(i.id || ('i' + Math.random())),
+
+    name: String(i.name || ''),
+
+    rate: Number(i.rate) >= 0 ? Number(i.rate) : 0
+
+  })) : [];
+
+
+
+  const cli = Array.isArray(raw.cli) ? raw.cli.map(c => ({
+
+    id: String(c.id || ('c' + Math.random())),
+
+    code: String(c.code || ''),
+
+    name: String(c.name || ''),
+
+    nid: String(c.nid || ''),
+
+    phone: String(c.phone || ''),
+
+    by: String(c.by || '')
+
+  })) : [];
+
+
+
+  const fin = Array.isArray(raw.fin) ? raw.fin.map(f => ({
+
+    id: String(f.id || ('f' + Math.random())),
+
+    cid: String(f.cid || ''),
+
+    src: String(f.src || 'o'),
+
+    amt: Number(f.amt) || 0,
+
+    date: String(f.date || TODAY),
+
+    rate: Number(f.rate) || cfg.rate,
+
+    dueDay: Number(f.dueDay) || cfg.due,
+
+    share: Number(f.share) || 0,
+
+    paid: Boolean(f.paid),
+
+    by: String(f.by || '')
+
+  })) : [];
+
+
+
+  const led = Array.isArray(raw.led) ? raw.led.map(x => ({
+
+    id: String(x.id || ('l' + Math.random())),
+
+    date: String(x.date || TODAY),
+
+    type: String(x.type || 'dep'),
+
+    src: String(x.src || 'o'),
+
+    amt: Number(x.amt) || 0,
+
+    cat: String(x.cat || ''),
+
+    note: String(x.note || ''),
+
+    ref: x.ref ? String(x.ref) : ''
+
+  })) : [];
+
+
+
+  const users = Array.isArray(raw.users) ? raw.users.map(u => ({
+
+    u: String(u.u || ''),
+
+    p: String(u.p || ''),
+
+    role: ['admin', 'acc', 'view'].includes(u.role) ? u.role : 'view',
+
+    name: String(u.name || '')
+
+  })).filter(u => u.u && u.p) : [];
+
+
+
+  const cats = Array.isArray(raw.cats) && raw.cats.length ? raw.cats.map(String) : DEFC.slice();
+
+  const log = Array.isArray(raw.log) ? raw.log.slice(-500).map(l => ({
+
+    t: String(l.t || ''),
+
+    u: String(l.u || ''),
+
+    a: String(l.a || '')
+
+  })) : [];
+
+
+
+  return { cfg, inv, cli, fin, led, users, cats, log };
+
+}
+
+
+
+function docRef() {
+
+  if (!fb || !db) return null;
+
+  return fb.doc(db, 'artifacts', APP_ID, 'public', 'data', 'workspace', 'main');
+
+}
+
+
+
+async function save() {
+
+  if (!fb || !db || !user) {
+
+    setSync('err', 'غير متصل بالسحاب');
+
+    toast('تم التحديث في الجلسة الحالية');
+
+    return;
+
+  }
+
+  setSync('syncing', 'جاري الحفظ...');
+
+  try {
+
+    await fb.setDoc(docRef(), {
+
+      cfg: S.cfg,
+
+      inv: S.inv,
+
+      cli: S.cli,
+
+      fin: S.fin,
+
+      led: S.led,
+
+      users: S.users,
+
+      cats: S.cats,
+
+      log: S.log.slice(-500),
+
+      updatedAt: new Date().toISOString()
+
+    });
+
+    setSync('ok', 'متصل بالسحاب');
+
+  } catch (err) {
+
+    console.error(err);
+
+    setSync('err', 'خطأ في الحفظ');
+
+    toast('تعذر الحفظ على السحاب');
+
+  }
+
+}
+
+
+
+async function connectCloud() {
+
+  try {
+
+    const [appM, authM, fsM] = await Promise.all([
+
+      import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"),
+
+      import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"),
+
+      import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js")
+
+    ]);
+
+    fb = {
+
+      initializeApp: appM.initializeApp,
+
+      getAuth: authM.getAuth,
+
+      signInAnonymously: authM.signInAnonymously,
+
+      onAuthStateChanged: authM.onAuthStateChanged,
+
+      getFirestore: fsM.getFirestore,
+
+      doc: fsM.doc,
+
+      setDoc: fsM.setDoc,
+
+      onSnapshot: fsM.onSnapshot
+
+    };
+
+    const app = fb.initializeApp(FIREBASE_CFG);
+
+    const auth = fb.getAuth(app);
+
+    db = fb.getFirestore(app);
+
+    await fb.signInAnonymously(auth);
+
+    fb.onAuthStateChanged(auth, u => {
+
+      if (!u) return;
+
+      user = u;
+
+      if (unsub) {
+
+        try { unsub(); } catch (_) {}
+
+      }
+
+      unsub = fb.onSnapshot(docRef(), snap => {
+
+        if (snap.exists()) {
+
+          S = normalize(snap.data());
+
+          if (ME) ME = S.users.find(x => x.u === ME.u) || null;
+
+        }
+
+        setSync('ok', 'متصل بالسحاب');
+
+        render();
+
+      }, () => {
+
+        setSync('err', 'انقطع الاتصال');
+
+      });
+
+    });
+
+  } catch (_) {
+
+    setSync('err', 'وضع غير متصل بالسحاب');
+
+  }
+
+}
+
+
+
+const can = a => ME && (ME.role === 'admin' || (ME.role === 'acc' && ['fin', 'cli', 'pay'].includes(a)));
+
+const canMod = x => ME && (ME.role === 'admin' || (ME.role === 'acc' && x.by === ME.u));
+
+const dueStr = f => String(f.date || TODAY).slice(0, 8) + ('0' + (Number(f.dueDay) || 27)).slice(-2);
+
+const st = f => f.paid ? 'paid' : (TODAY > dueStr(f) ? 'late' : 'open');
+
+const ret = f => (Number(f.amt) || 0) * (Number(f.rate) || 0) / 100;
+
+const isIn = t => t === 'dep' || t === 'pay';
+
+const cash = () => S.led.reduce((a, x) => a + (isIn(x.type) ? (Number(x.amt) || 0) : -(Number(x.amt) || 0)), 0);
+
+
+
+const earnedOf = s => {
+
+  if (s === 'o') {
+
+    const loansRet = S.fin.filter(f => f.paid).reduce((a, f) => {
+
+      const r = ret(f);
+
+      return a + (f.src === 'o' ? r : r * (100 - (Number(f.share) || 0)) / 100);
+
+    }, 0);
+
+    const exps = S.led.filter(x => x.type === 'exp').reduce((a, x) => a + (Number(x.amt) || 0), 0);
+
+    return loansRet - exps;
+
+  }
+
+  return S.fin.filter(f => f.paid && f.src === s).reduce((a, f) => a + ret(f) * ((Number(f.share) || 0) / 100), 0);
+
+};
+
+
+
+const capOf = s => {
+
+  const net = S.led.filter(x => x.src === s && (x.type === 'dep' || x.type === 'wd'))
+
+    .reduce((a, x) => a + (x.type === 'dep' ? (Number(x.amt) || 0) : -(Number(x.amt) || 0)), 0);
+
+  return net + earnedOf(s);
+
+};
+
+
+
+const out = s => S.fin.filter(f => f.src === s && !f.paid).reduce((a, f) => a + (Number(f.amt) || 0), 0);
+
+const avail = s => capOf(s) - out(s);
+
+const srcs = () => ['o'].concat(S.inv.map(i => i.id));
+
+const nameOf = s => s === 'o' ? 'المكتب' : (S.inv.find(i => i.id === s) || { name: '—' }).name;
+
+const cname = id => (S.cli.find(c => c.id === id) || { name: '—' }).name;
+
+const tag = s => s === 'paid'
+
+  ? '<span class="tag ok">مسدد</span>'
+
+  : s === 'late'
+
+    ? '<span class="tag bad">متأخر</span>'
+
+    : '<span class="tag warn">مفتوح</span>';
+
+const rowItem = (a, b, c, d, act) =>
+
+  `<div class="item"><div class="im"><b>${a}</b><span>${b}</span></div><div class="is">${c}${d || ''}</div>${act ? `<div class="ia">${act}</div>` : ''}</div>`;
+
+
+
+function stats() {
+
+  const ym = TODAY.slice(0, 7);
+
+  const r = { out: 0, late: 0, lateN: 0, month: 0, profit: 0, exp: 0, inM: 0, outM: 0, avail: 0 };
+
+  S.fin.forEach(f => {
+
+    const amt = Number(f.amt) || 0;
+
+    const tot = amt + ret(f);
+
+    const s = st(f);
+
+    if (!f.paid) {
+
+      r.out += amt;
+
+      if (s === 'late') { r.late += tot; r.lateN++; }
+
+      else if (dueStr(f).slice(0, 7) === ym) r.month += tot;
+
+    } else {
+
+      r.profit += f.src === 'o' ? ret(f) : ret(f) * (100 - (Number(f.share) || 0)) / 100;
+
+    }
+
+  });
+
+  S.led.forEach(x => {
+
+    const amt = Number(x.amt) || 0;
+
+    if (x.type === 'exp') r.exp += amt;
+
+    if (String(x.date || '').slice(0, 7) === ym) {
+
+      if (isIn(x.type)) r.inM += amt;
+
+      else r.outM += amt;
+
+    }
+
+  });
+
+  srcs().forEach(s => { r.avail += Math.max(0, avail(s)); });
+
+  r.net = r.profit - r.exp;
+
+  r.cash = cash();
+
+  return r;
+
+}
+
+
+
+function addLog(a) {
+
+  S.log.push({
+
+    t: new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 16).replace('T', ' '),
+
+    u: ME ? ME.name : '',
+
+    a
+
+  });
+
+  if (S.log.length > 500) S.log = S.log.slice(-500);
+
+}
+
+
+
+function ask(msg, onConfirm) {
+
+  const d = $('dlg');
+
+  d.innerHTML = `<div class="dbox"><p>${esc(msg)}</p><div class="ia"><button type="button" class="btn del" id="dlg-y">تأكيد</button><button type="button" class="btn ghost" id="dlg-n">إلغاء</button></div></div>`;
+
+  d.hidden = false;
+
+  $('dlg-n').onclick = () => { d.hidden = true; };
+
+  $('dlg-y').onclick = () => { d.hidden = true; onConfirm(); };
+
+}
+
+
+
+function openForm(title, fields, onSave) {
+
+  const d = $('dlg');
+
+  d.innerHTML = `
+
+    <div class="dbox">
+
+      <h3 style="margin-bottom:12px">${esc(title)}</h3>
+
+      ${fields.map((f, i) => `
+
+        <div style="margin-bottom:10px">
+
+          <label for="f_${i}">${esc(f.label)}</label>
+
+          ${f.opts
+
+            ? `<select id="f_${i}">${f.opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === String(f.value) ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`
+
+            : `<input id="f_${i}" type="${f.type || 'text'}" value="${esc(f.value == null ? '' : f.value)}">`
+
+          }
+
+        </div>`).join('')}
+
+      <div class="ia">
+
+        <button type="button" class="btn" id="f-ok">حفظ</button>
+
+        <button type="button" class="btn ghost" id="f-no">إلغاء</button>
+
+      </div>
+
+    </div>`;
+
+  d.hidden = false;
+
+  $('f-no').onclick = () => { d.hidden = true; };
+
+  $('f-ok').onclick = () => {
+
+    const vals = fields.map((_, i) => $('f_' + i).value);
+
+    if (onSave(vals) !== false) d.hidden = true;
+
+  };
+
+}
+
+
+
+function go(t) {
+
+  TAB = t;
+
+  OPEN = false;
+
+  Q = '';
+
+  FS = 'all';
+
+  LF = 'all';
+
+  render();
+
+  window.scrollTo(0, 0);
+
+}
+
+
+
+function tog() {
+
+  OPEN = !OPEN;
+
+  render();
+
+}
+
+
+
+function login(ev) {
+
+  ev.preventDefault();
+
+  const u = $('lu').value.trim();
+
+  const p = $('lp').value;
+
+  const found = S.users.find(x => x.u === u && x.p === p);
+
+  if (!found) {
+
+    toast('اسم المستخدم أو كلمة المرور غير صحيحة');
+
+    return;
+
+  }
+
+  ME = found;
+
+  TAB = 'home';
+
+  render();
+
+}
+
+
+
+function logout() {
+
+  ME = null;
+
+  OPEN = false;
+
+  render();
+
+}
+
+
+
+async function doSetup(ev) {
+
+  ev.preventDefault();
+
+  const office = $('s1').value.trim() || 'مكتب التمويل';
+
+  const name = $('s2').value.trim();
+
+  const u = $('s3').value.trim();
+
+  const p = $('s4').value;
+
+  const rate = +$('s5').value;
+
+  const due = +$('s6').value;
+
+  if (!name || !u || p.length < 6 || !(rate > 0) || !(due >= 1 && due <= 28)) {
+
+    toast('تحقق من البيانات (كلمة المرور 6 أحرف على الأقل)');
+
+    return;
+
+  }
+
+  S.cfg = { office, rate, due };
+
+  const adminUser = { u, p, role: 'admin', name };
+
+  S.users = [adminUser];
+
+  ME = adminUser;
+
+  TAB = 'home';
+
+  addLog('تهيئة النظام');
+
+  render();
+
+  toast('تم حفظ إعدادات المكتب');
+
+  await save();
+
+}
+
+
+
+function openInitialRestore() {
+
+  const d = $('dlg');
+
+  d.innerHTML = `
+
+    <div class="dbox">
+
+      <h3 style="margin-bottom:10px">استيراد نسخة احتياطية</h3>
+
+      <p style="font-size:13px;color:var(--mut)">الصق نص النسخة الاحتياطية (JSON) لاستعادة البيانات:</p>
+
+      <textarea id="init-json" rows="5"></textarea>
+
+      <div class="ia" style="margin-top:12px">
+
+        <button type="button" class="btn" id="init-run">استعادة</button>
+
+        <button type="button" class="btn ghost" id="init-cancel">إلغاء</button>
+
+      </div>
+
+    </div>`;
+
+  d.hidden = false;
+
+  $('init-cancel').onclick = () => { d.hidden = true; };
+
+  $('init-run').onclick = async () => {
+
+    let parsed;
+
+    try { parsed = JSON.parse($('init-json').value); } catch (_) { toast('النص غير صالح'); return; }
+
+    if (!parsed || !parsed.cfg || !['inv', 'cli', 'fin', 'led', 'users'].every(k => Array.isArray(parsed[k])) || !parsed.users.some(x => x.role === 'admin')) {
+
+      toast('هذه ليست نسخة احتياطية صحيحة');
+
+      return;
+
+    }
+
+    d.hidden = true;
+
+    S = normalize(parsed);
+
+    addLog('استيراد نسخة احتياطية');
+
+    render();
+
+    toast('تم استيراد البيانات');
+
+    await save();
+
+  };
+
+}
+
+
+
+function setupView() {
+
+  return `
+
+    <div class="login">
+
+      <form class="lbox" onsubmit="doSetup(event)">
+
+        <div class="lh">
+
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+
+            <h2>إعداد مكتب التمويل</h2>
+
+            ${syncPill()}
+
+          </div>
+
+          <span>تهيئة حساب المدير وإعدادات المكتب</span>
+
+        </div>
+
+        <div class="lb">
+
+          <div class="fg"><label for="s1">اسم المكتب</label><input id="s1" value="مكتب التمويل" required></div>
+
+          <div class="fg"><label for="s2">اسم المدير</label><input id="s2" required></div>
+
+          <div class="fg"><label for="s3">اسم المستخدم</label><input id="s3" autocomplete="username" required></div>
+
+          <div class="fg"><label for="s4">كلمة المرور (6 أحرف على الأقل)</label><input id="s4" type="password" autocomplete="new-password" required></div>
+
+          <div class="form fg">
+
+            <div><label for="s5">نسبة العائد %</label><input id="s5" type="number" value="30"></div>
+
+            <div><label for="s6">يوم الاستحقاق</label><input id="s6" type="number" min="1" max="28" value="27"></div>
+
+          </div>
+
+          <button type="submit" class="btn" style="width:100%">بدء النظام</button>
+
+          <div class="note" style="margin-top:12px">
+
+            لديك نسخة احتياطية JSON؟
+
+            <button type="button" class="btn ghost sm" style="margin-top:6px;width:100%" onclick="openInitialRestore()">استيراد نسخة احتياطية</button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>`;
+
+}
+
+
+
+function render() {
+
+  const root = $('app');
+
+  if (!root) return;
+
+  if (!S.users.length) {
+
+    root.innerHTML = setupView();
+
+    return;
+
+  }
+
+  if (!ME) {
+
+    root.innerHTML = `
+
+      <div class="login">
+
+        <form class="lbox" onsubmit="login(event)">
+
+          <div class="lh">
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+
+              <h2>${esc(S.cfg.office)}</h2>
+
+              ${syncPill()}
+
+            </div>
+
+            <span>تسجيل الدخول إلى النظام</span>
+
+          </div>
+
+          <div class="lb">
+
+            <div class="fg"><label for="lu">اسم المستخدم</label><input id="lu" autocomplete="username" required></div>
+
+            <div class="fg"><label for="lp">كلمة المرور</label><input id="lp" type="password" autocomplete="current-password" required></div>
+
+            <button type="submit" class="btn" style="width:100%">دخول</button>
+
+          </div>
+
+        </form>
+
+      </div>`;
+
+    return;
+
+  }
+
+
+
+  const tabs = [['home','الرئيسية'],['fin','التمويلات'],['cli','العملاء'],['tre','الخزنة'],['rep','التقارير']];
+
+  if (ME.role === 'admin') tabs.push(['set','الإعدادات'],['usr','المستخدمون']);
+
+  const cur = tabs.find(t => t[0] === TAB) || tabs[0];
+
+  const views = { home: vHome, fin: vFin, cli: vCli, tre: vTre, rep: vRep, set: vSet, usr: vUsr };
+
+
+
+  root.innerHTML = `
+
+    <div class="shell">
+
+      <aside class="side${OPEN ? ' open' : ''}">
+
+        <div class="brand">
+
+          <b>${esc(S.cfg.office)}</b>
+
+          <span>نظام إدارة التمويل</span>
+
+        </div>
+
+        ${tabs.map(t => `<button type="button" class="${TAB === t[0] ? 'on' : ''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('')}
+
+        <div class="who">
+
+          <b>${esc(ME.name)}</b>
+
+          <span>${ROLE[ME.role]}</span>
+
+          <button type="button" class="btn ghost sm" onclick="logout()">خروج</button>
+
+        </div>
+
+      </aside>
+
+      <div class="ov${OPEN ? ' show' : ''}" onclick="tog()"></div>
+
+      <main>
+
+        <div class="top">
+
+          <div class="top-r">
+
+            <button type="button" class="btn ghost sm menu" onclick="tog()">☰ القائمة</button>
+
+            <h2>${cur[1]}</h2>
+
+          </div>
+
+          <div class="top-r">
+
+            ${syncPill()}
+
+            <span class="dt">${TODAY}</span>
+
+          </div>
+
+        </div>
+
+        ${views[cur[0]]()}
+
+      </main>
+
+    </div>`;
+
+}
+
+
+
+function bars() {
+
+  const p = TODAY.split('-'), ms = [];
+
+  for (let i = 5; i >= 0; i--) {
+
+    ms.push(new Date(Date.UTC(+p[0], +p[1] - 1 - i, 1)).toISOString().slice(0, 7));
+
+  }
+
+  const fin = ms.map(k => S.fin.filter(f => String(f.date || '').slice(0, 7) === k).reduce((a, f) => a + (Number(f.amt) || 0), 0));
+
+  const col = ms.map(k => S.led.filter(x => x.type === 'pay' && String(x.date || '').slice(0, 7) === k).reduce((a, x) => a + (Number(x.amt) || 0), 0));
+
+  const mx = Math.max(...fin, ...col, 1), H = 120;
+
+  let sv = `<svg viewBox="0 0 300 ${H + 22}" width="100%" role="img" aria-label="التمويل والتحصيل آخر ستة أشهر">`;
+
+  ms.forEach((k, i) => {
+
+    const x = (5 - i) * 50 + 10, h1 = fin[i] / mx * H, h2 = col[i] / mx * H;
+
+    sv += `<rect x="${x}" y="${H - h1}" width="16" height="${h1}" rx="3" fill="var(--b1)"/>`;
+
+    sv += `<rect x="${x + 19}" y="${H - h2}" width="16" height="${h2}" rx="3" fill="var(--gold)"/>`;
+
+    sv += `<text x="${x + 17}" y="${H + 15}" text-anchor="middle" font-size="10" fill="var(--mut)">${MN[+k.slice(5) - 1]}</text>`;
+
+  });
+
+  return sv + '</svg>';
+
+}
+
+
+
+function vHome() {
+
+  const s = stats();
+
+  const up = S.fin.filter(f => !f.paid).sort((a, b) => dueStr(a) < dueStr(b) ? -1 : 1).slice(0, 5);
+
+  return `
+
+    <div class="hero">
+
+      <div><small>رصيد الخزنة</small><div class="big">${money(s.cash)}</div></div>
+
+      <div class="hs">
+
+        <div><small>داخل هذا الشهر</small><b>${money(s.inM)}</b></div>
+
+        <div><small>خارج هذا الشهر</small><b>${money(s.outM)}</b></div>
+
+      </div>
+
+    </div>
+
+    <div class="tiles">
+
+      <button type="button" class="t" onclick="go('tre')"><small>المتاح للتمويل</small><b>${money(s.avail)}</b></button>
+
+      <button type="button" class="t" onclick="go('fin')"><small>مستحق هذا الشهر</small><b>${money(s.month)}</b></button>
+
+      <button type="button" class="t" onclick="go('fin')"><small>المتأخرات (${s.lateN})</small><b class="${s.lateN ? 'bad' : ''}">${money(s.late)}</b></button>
+
+      <button type="button" class="t" onclick="go('tre')"><small>صافي ربح الشركة</small><b class="${s.net < 0 ? 'bad' : 'ok'}">${money(s.net)}</b></button>
+
+    </div>
+
+    <div class="two">
+
+      <div class="card">
+
+        <h3>التمويل والتحصيل — آخر ٦ شهور</h3>
+
+        <div class="lg"><span><i style="background:var(--b1)"></i>تمويل جديد</span><span><i style="background:var(--gold)"></i>تحصيل</span></div>
+
+        ${bars()}
+
+      </div>
+
+      <div class="card">
+
+        <h3>أقرب الاستحقاقات</h3>
+
+        ${up.length ? up.map(f => rowItem(esc(cname(f.cid)), 'استحقاق ' + dueStr(f), `<b>${money((Number(f.amt) || 0) + ret(f))}</b>`, tag(st(f)))).join('') : '<div class="empty">لا توجد تمويلات مفتوحة.</div>'}
+
+      </div>
+
+    </div>`;
+
+}
+
+
+
+const chips = (cur, list, fn) => `<div class="chips">${list.map(x => `<button type="button" class="chip${cur === x[0] ? ' on' : ''}" onclick="${fn}('${x[0]}')">${x[1]}</button>`).join('')}</div>`;
+
+function setFS(v) { FS = v; render(); }
+
+
+
+function finItems() {
+
+  const q = Q.trim().toLowerCase();
+
+  const L = S.fin.filter(f => {
+
+    const c = S.cli.find(x => x.id === f.cid) || {};
+
+    return (!q || `${c.name || ''} ${c.code || ''} ${c.nid || ''}`.toLowerCase().includes(q)) && (FS === 'all' || st(f) === FS);
+
+  }).sort((a, b) => String(a.date || '') < String(b.date || '') ? 1 : -1);
+
+
+
+  return L.length ? L.map(f => {
+
+    const amt = Number(f.amt) || 0;
+
+    const fRate = Number(f.rate) || 0;
+
+    const fShare = Number(f.share) || 0;
+
+    return rowItem(
+
+      esc(cname(f.cid)),
+
+      `${esc(nameOf(f.src))} · ${esc(f.date || '')} · استحقاق ${dueStr(f)}${f.src !== 'o' ? ' · المستثمر ' + (+(fRate * fShare / 100).toFixed(1)) + '% / المكتب ' + (+(fRate - fRate * fShare / 100).toFixed(1)) + '%' : ''}`,
+
+      `<b>${money(amt + ret(f))}</b><small>أصل ${money(amt)} + عائد ${money(ret(f))}</small>`,
+
+      tag(st(f)),
+
+      (!f.paid && can('pay') ? `<button type="button" class="btn sm" onclick="pay('${f.id}')">تم السداد كاملاً</button>` : '') +
+
+      (f.paid && ME.role === 'admin' ? `<button type="button" class="btn ghost sm" onclick="undoPay('${f.id}')">تراجع عن السداد</button>` : '') +
+
+      (!f.paid && canMod(f) ? `<button type="button" class="btn ghost sm" onclick="editFin('${f.id}')">تعديل</button>` : '') +
+
+      (canMod(f) ? `<button type="button" class="btn del sm" onclick="delFin('${f.id}')">حذف</button>` : '')
+
+    );
+
+  }).join('') : '<div class="empty">لا توجد نتائج.</div>';
+
+}
+
+
+
+function vFin() {
+
+  const add = can('fin') ? `
+
+    <div class="card">
+
+      <h3>تمويل جديد</h3>
+
+      <div class="form">
+
+        <div><label for="fc">العميل</label><select id="fc">${S.cli.map(c => `<option value="${esc(c.id)}">${esc(c.code + ' — ' + c.name)}</option>`).join('')}</select></div>
+
+        <div><label for="fs">مصدر المال</label><select id="fs">${srcs().map(s => `<option value="${esc(s)}">${esc(nameOf(s))} — متاح ${money(avail(s))}</option>`).join('')}</select></div>
+
+        <div><label for="fa">المبلغ</label><input id="fa" type="number" min="1"></div>
+
+        <div><label for="fd">التاريخ</label><input id="fd" type="date" value="${TODAY}"></div>
+
+        <button type="button" class="btn" onclick="addFin()">تسجيل التمويل</button>
+
+      </div>
+
+      <div class="note" style="margin-top:12px">العائد ${S.cfg.rate}% يُسدَّد مع الأصل يوم ${S.cfg.due} من نفس الشهر.</div>
+
+    </div>` : '';
+
+
+
+  return add + `
+
+    <div class="card">
+
+      <h3>سجل التمويلات</h3>
+
+      <input id="fq" placeholder="بحث بالاسم أو الكود أو الهوية" value="${esc(Q)}" oninput="Q=this.value;$('fl').innerHTML=finItems()">
+
+      ${chips(FS, [['all','الكل'],['open','مفتوح'],['late','متأخر'],['paid','مسدد']], 'setFS')}
+
+      <div id="fl">${finItems()}</div>
+
+    </div>`;
+
+}
+
+
+
+async function addFin() {
+
+  const cid = $('fc').value, src = $('fs').value, a = +$('fa').value, d = $('fd').value;
+
+  if (!cid || !(a > 0) || !d) { toast('أكمل العميل والمبلغ والتاريخ'); return; }
+
+  if (a > avail(src)) { toast('المبلغ أكبر من المتاح في ' + nameOf(src)); return; }
+
+  if (a > cash()) { toast('رصيد الخزنة لا يكفي'); return; }
+
+  const id = 'f' + Date.now();
+
+  const sh = src === 'o' ? 0 : Math.min(100, S.inv.find(i => i.id === src).rate / (+S.cfg.rate) * 100);
+
+  S.fin.push({ id, cid, src, amt: a, date: d, rate: +S.cfg.rate, dueDay: +S.cfg.due, share: sh, paid: false, by: ME.u });
+
+  S.led.push({ id: 'lf' + id, date: d, type: 'fin', src, amt: a, note: 'تمويل — ' + cname(cid), ref: id });
+
+  addLog('تمويل جديد: ' + cname(cid) + ' — ' + money(a));
+
+  render();
+
+  toast('تم تسجيل التمويل');
+
+  await save();
+
+}
+
+
+
+async function pay(id) {
+
+  const f = S.fin.find(x => x.id === id);
+
+  if (!f) return;
+
+  f.paid = true;
+
+  const tot = (Number(f.amt) || 0) + ret(f);
+
+  S.led.push({ id: 'lp' + id, date: TODAY, type: 'pay', src: f.src, amt: tot, note: 'سداد — ' + cname(f.cid), ref: id });
+
+  addLog('سداد: ' + cname(f.cid) + ' — ' + money(tot));
+
+  render();
+
+  toast('تم تسجيل السداد');
+
+  await save();
+
+}
+
+
+
+function undoPay(id) {
+
+  const f = S.fin.find(x => x.id === id);
+
+  if (!f) return;
+
+  ask('التراجع عن سداد ' + cname(f.cid) + '؟', async () => {
+
+    f.paid = false;
+
+    S.led = S.led.filter(x => !(x.ref === id && x.type === 'pay'));
+
+    addLog('تراجع عن السداد: ' + cname(f.cid));
+
+    render();
+
+    toast('تم التراجع عن السداد');
+
+    await save();
+
+  });
+
+}
+
+
+
+function delFin(id) {
+
+  const f = S.fin.find(x => x.id === id);
+
+  if (!f || !canMod(f)) return;
+
+  ask('حذف تمويل ' + cname(f.cid) + ' بمبلغ ' + money(f.amt) + '؟', async () => {
+
+    S.fin = S.fin.filter(x => x.id !== id);
+
+    S.led = S.led.filter(x => x.ref !== id);
+
+    addLog('حذف تمويل: ' + cname(f.cid) + ' — ' + money(f.amt));
+
+    render();
+
+    toast('تم الحذف');
+
+    await save();
+
+  });
+
+}
+
+
+
+function editFin(id) {
+
+  const f = S.fin.find(x => x.id === id);
+
+  if (!f || f.paid || !canMod(f)) return;
+
+  openForm('تعديل تمويل', [
+
+    { label: 'العميل', opts: S.cli.map(c => [c.id, c.code + ' — ' + c.name]), value: f.cid },
+
+    { label: 'مصدر المال', opts: srcs().map(x => [x, nameOf(x)]), value: f.src },
+
+    { label: 'المبلغ', type: 'number', value: f.amt },
+
+    { label: 'التاريخ', type: 'date', value: f.date }
+
+  ], async v => {
+
+    const a = +v[2], src = v[1];
+
+    if (!(a > 0) || !v[3]) { toast('أكمل المبلغ والتاريخ'); return false; }
+
+    const room = avail(src) + (src === f.src ? (Number(f.amt) || 0) : 0);
+
+    if (a > room) { toast('المبلغ أكبر من المتاح في ' + nameOf(src)); return false; }
+
+    if (cash() + (Number(f.amt) || 0) - a < 0) { toast('رصيد الخزنة لا يكفي'); return false; }
+
+    f.cid = v[0]; f.src = src; f.amt = a; f.date = v[3];
+
+    f.share = src === 'o' ? 0 : Math.min(100, S.inv.find(i => i.id === src).rate / f.rate * 100);
+
+    const l = S.led.find(x => x.ref === id && x.type === 'fin');
+
+    if (l) { l.src = src; l.amt = a; l.date = v[3]; l.note = 'تمويل — ' + cname(f.cid); }
+
+    addLog('تعديل تمويل: ' + cname(f.cid) + ' — ' + money(a));
+
+    render();
+
+    toast('تم التعديل');
+
+    await save();
+
+  });
+
+}
+
+
+
+function vCli() {
+
+  const add = can('cli') ? `
+
+    <div class="card">
+
+      <h3>عميل جديد</h3>
+
+      <div class="form">
+
+        <div><label for="cn">الاسم</label><input id="cn"></div>
+
+        <div><label for="ci">رقم الهوية</label><input id="ci" inputmode="numeric"></div>
+
+        <div><label for="cp">الجوال</label><input id="cp" inputmode="tel"></div>
+
+        <button type="button" class="btn" onclick="addCli()">إضافة العميل</button>
+
+      </div>
+
+    </div>` : '';
+
+
+
+  return add + `
+
+    <div class="card">
+
+      <h3>العملاء</h3>
+
+      ${S.cli.length ? S.cli.map(c => {
+
+        const fs = S.fin.filter(f => f.cid === c.id);
+
+        const l = fs.filter(f => st(f) === 'late').length;
+
+        return rowItem(
+
+          esc(c.name),
+
+          `${esc(c.code)} · هوية ${esc(c.nid)} · ${esc(c.phone || '—')}`,
+
+          `<b>${fs.length} تمويل</b>`,
+
+          l === 0 ? '<span class="tag ok">ملتزم</span>' : l === 1 ? '<span class="tag warn">متوسط</span>' : '<span class="tag bad">متعثر</span>',
+
+          `<button type="button" class="btn ghost sm" onclick="stmt('${c.id}')">كشف الحساب</button>` +
+
+          (canMod(c) ? `<button type="button" class="btn ghost sm" onclick="editCli('${c.id}')">تعديل</button><button type="button" class="btn del sm" onclick="delCli('${c.id}')">حذف</button>` : '')
+
+        );
+
+      }).join('') : '<div class="empty">لا يوجد عملاء مسجلون بعد.</div>'}
+
+    </div>`;
+
+}
+
+
+
+async function addCli() {
+
+  const n = $('cn').value.trim(), i = $('ci').value.trim(), p = $('cp').value.trim();
+
+  if (!n || !i) { toast('الاسم ورقم الهوية مطلوبان'); return; }
+
+  if (S.cli.some(c => c.nid === i)) { toast('رقم الهوية مسجل من قبل'); return; }
+
+  S.cli.push({ id: 'c' + Date.now(), code: 'C' + ('00' + (S.cli.length + 1)).slice(-3), name: n, nid: i, phone: p, by: ME.u });
+
+  addLog('عميل جديد: ' + n);
+
+  render();
+
+  toast('تمت إضافة العميل');
+
+  await save();
+
+}
+
+
+
+function editCli(id) {
+
+  const c = S.cli.find(x => x.id === id);
+
+  if (!c || !canMod(c)) return;
+
+  openForm('تعديل عميل', [
+
+    { label: 'الاسم', value: c.name },
+
+    { label: 'رقم الهوية', value: c.nid },
+
+    { label: 'الجوال', value: c.phone }
+
+  ], async v => {
+
+    const n = v[0].trim(), i = v[1].trim();
+
+    if (!n || !i) { toast('الاسم ورقم الهوية مطلوبان'); return false; }
+
+    if (S.cli.some(x => x.id !== id && x.nid === i)) { toast('رقم الهوية مسجل لعميل آخر'); return false; }
+
+    c.name = n; c.nid = i; c.phone = v[2].trim();
+
+    S.led.forEach(x => {
+
+      if (x.ref) {
+
+        const f = S.fin.find(y => y.id === x.ref);
+
+        if (f && f.cid === id) x.note = (x.type === 'pay' ? 'سداد — ' : 'تمويل — ') + n;
+
+      }
+
+    });
+
+    addLog('تعديل عميل: ' + n);
+
+    render();
+
+    toast('تم التعديل');
+
+    await save();
+
+  });
+
+}
+
+
+
+function delCli(id) {
+
+  const c = S.cli.find(x => x.id === id);
+
+  if (!c || !canMod(c)) return;
+
+  const n = S.fin.filter(f => f.cid === id).length;
+
+  if (n) { toast('لا يمكن حذف عميل له تمويلات مسجلة'); return; }
+
+  ask('حذف العميل ' + c.name + '؟', async () => {
+
+    S.cli = S.cli.filter(x => x.id !== id);
+
+    addLog('حذف عميل: ' + c.name);
+
+    render();
+
+    toast('تم الحذف');
+
+    await save();
+
+  });
+
+}
+
+
+
+function setLF(v) { LF = v; render(); }
+
+function opType() {
+
+  const isExp = $('ot').value === 'exp';
+
+  $('oc').hidden = !isExp;
+
+  $('ow').hidden = isExp;
+
+}
+
+
+
+function vTre() {
+
+  const s = stats();
+
+  const add = can('fin') ? `
+
+    <div class="card">
+
+      <h3>تسجيل حركة</h3>
+
+      <div class="form">
+
+        <div><label for="ot">النوع</label><select id="ot" onchange="opType()"><option value="dep">إيداع</option><option value="wd">سحب</option><option value="exp">مصروف</option></select></div>
+
+        <div id="ow"><label for="os">المصدر</label><select id="os">${srcs().map(x => `<option value="${esc(x)}">${esc(nameOf(x))}</option>`).join('')}</select></div>
+
+        <div id="oc" hidden><label for="oc2">بند المصروف</label><select id="oc2"><option value="">اختر البند</option>${S.cats.map(c => `<option>${esc(c)}</option>`).join('')}</select></div>
+
+        <div><label for="oa">المبلغ</label><input id="oa" type="number" min="1"></div>
+
+        <div><label for="on">ملاحظة</label><input id="on"></div>
+
+        <button type="button" class="btn" onclick="addOp()">تسجيل</button>
+
+      </div>
+
+    </div>` : '';
+
+
+
+  const L = S.led.filter(x => LF === 'all' || (LF === 'in') === isIn(x.type))
+
+    .sort((a, b) => String(a.date || '') < String(b.date || '') ? 1 : String(a.date || '') > String(b.date || '') ? -1 : 0);
+
+
+
+  return `
+
+    <div class="hero">
+
+      <div><small>رصيد الخزنة</small><div class="big">${money(s.cash)}</div></div>
+
+      <div class="hs">
+
+        <div><small>داخل هذا الشهر</small><b>${money(s.inM)}</b></div>
+
+        <div><small>خارج هذا الشهر</small><b>${money(s.outM)}</b></div>
+
+      </div>
+
+    </div>
+
+    ${add}
+
+    <div class="card">
+
+      <h3>توزيع الأموال</h3>
+
+      ${srcs().map(x => {
+
+        const c = capOf(x), er = earnedOf(x), p = c > 0 ? Math.min(100, Math.round(out(x) / c * 100)) : 0;
+
+        const sub = er >= 0 ? `عوائد محصّلة ${money(er)}` : `مصروفات ${money(Math.abs(er))}`;
+
+        return `<div class="sp"><b>${esc(nameOf(x))} <small style="color:var(--mut);font-weight:400">(${sub})</small></b><span>متاح ${money(avail(x))}</span></div><div class="bar"><i style="width:${p}%"></i></div>`;
+
+      }).join('')}
+
+    </div>
+
+    <div class="card">
+
+      <h3>دفتر الخزنة</h3>
+
+      ${chips(LF, [['all','الكل'],['in','داخل'],['out','خارج']], 'setLF')}
+
+      ${L.length ? L.map(x => rowItem(
+
+        esc(x.note),
+
+        `${esc(x.date || '')} · ${esc(x.type === 'exp' && x.cat ? 'مصروف · ' + x.cat : LB[x.type])} · ${esc(nameOf(x.src))}`,
+
+        `<b class="${isIn(x.type) ? 'ok' : 'bad'}">${isIn(x.type) ? '+' : '−'} ${money(Number(x.amt) || 0)}</b>`,
+
+        '',
+
+        ME.role === 'admin'
+
+          ? `${x.ref ? '' : `<button type="button" class="btn ghost sm" onclick="editOp('${x.id}')">تعديل</button>`}<button type="button" class="btn del sm" onclick="delOp('${x.id}')">${x.type === 'pay' ? 'تراجع عن السداد' : 'حذف'}</button>`
+
+          : ''
+
+      )).join('') : '<div class="empty">لا توجد حركات.</div>'}
+
+    </div>`;
+
+}
+
+
+
+async function addOp() {
+
+  const t = $('ot').value, s = $('os').value, a = +$('oa').value, n = $('on').value.trim(), c = t === 'exp' ? $('oc2').value : '';
+
+  if (t === 'exp' && !c) { toast('اختر بند المصروف أولاً'); return; }
+
+  if (!(a > 0)) { toast('اكتب المبلغ'); return; }
+
+  if (t !== 'dep') {
+
+    if (a > cash()) { toast('المبلغ أكبر من رصيد الخزنة'); return; }
+
+    if (t === 'wd' && a > avail(s)) { toast('المبلغ أكبر من المتاح في ' + nameOf(s)); return; }
+
+  }
+
+  S.led.push({ id: 'l' + Date.now(), date: TODAY, type: t, src: t === 'exp' ? 'o' : s, amt: a, cat: c, note: t === 'exp' ? c + (n ? ' — ' + n : '') : (n || LB[t]) });
+
+  addLog(LB[t] + ': ' + (c || nameOf(s)) + ' — ' + money(a));
+
+  render();
+
+  toast('تم التسجيل');
+
+  await save();
+
+}
+
+
+
+function editOp(id) {
+
+  const x = S.led.find(y => y.id === id);
+
+  if (!x || ME.role !== 'admin' || x.ref) return;
+
+  const ex = x.type === 'exp';
+
+  const memo = ex ? (x.cat && x.note.startsWith(x.cat) ? x.note.slice(x.cat.length).replace(/^ — /, '') : '') : x.note;
+
+  const fields = [
+
+    { label: 'التاريخ', type: 'date', value: x.date },
+
+    { label: 'المبلغ', type: 'number', value: x.amt }
+
+  ];
+
+  if (ex) {
+
+    fields.push({ label: 'بند المصروف', opts: S.cats.concat(S.cats.includes(x.cat) || !x.cat ? [] : [x.cat]).map(c => [c, c]), value: x.cat });
+
+  }
+
+  fields.push({ label: 'ملاحظة', value: memo });
+
+
+
+  openForm('تعديل حركة', fields, async v => {
+
+    const a = +v[1];
+
+    if (!(a > 0) || !v[0]) { toast('أكمل التاريخ والمبلغ'); return false; }
+
+    const old = Object.assign({}, x);
+
+    const cat = ex ? v[2] : '';
+
+    const m = ex ? v[3].trim() : v[2].trim();
+
+    x.date = v[0]; x.amt = a; x.cat = cat; x.note = ex ? cat + (m ? ' — ' + m : '') : (m || LB[x.type]);
+
+    if (cash() < 0 || avail(x.src) < 0) {
+
+      Object.assign(x, old);
+
+      toast('التعديل يجعل الرصيد أو المتاح سالباً');
+
+      return false;
+
+    }
+
+    addLog('تعديل حركة: ' + x.note + ' — ' + money(a));
+
+    render();
+
+    toast('تم التعديل');
+
+    await save();
+
+  });
+
+}
+
+
+
+function delOp(id) {
+
+  const x = S.led.find(y => y.id === id);
+
+  if (!x || ME.role !== 'admin') return;
+
+  if (x.type === 'pay') { undoPay(x.ref); return; }
+
+  if (x.type === 'fin') { delFin(x.ref); return; }
+
+  ask('حذف حركة «' + x.note + '» بمبلغ ' + money(x.amt) + '؟', async () => {
+
+    S.led = S.led.filter(y => y.id !== id);
+
+    addLog('حذف حركة: ' + x.note + ' — ' + money(x.amt));
+
+    render();
+
+    toast('تم الحذف');
+
+    await save();
+
+  });
+
+}
+
+
+
+const payOf = f => S.led.find(x => x.ref === f.id && x.type === 'pay');
+
+const mlab = ym => MN[+ym.slice(5) - 1] + ' ' + ym.slice(0, 4);
+
+const rh = t => `<div class="card"><div class="rh"><h3>${esc(S.cfg.office)}</h3><span>${t} · صدر بتاريخ ${TODAY}</span></div></div>`;
+
+const tl = (a, b, c) => `<div class="t" style="cursor:default"><small>${a}</small><b${c ? ` class="${c}"` : ''}>${b}</b></div>`;
+
+
+
+function prt() {
+
+  try { window.print(); } catch (_) { toast('تعذر فتح نافذة الطباعة في هذا الإطار'); }
+
+}
+
+
+
+function stmt(id) {
+
+  RC = id || (S.cli[0] ? S.cli[0].id : '');
+
+  RT = 'cli';
+
+  go('rep');
+
+}
+
+
+
+function mstat(ym) {
+
+  const safeYm = /^\d{4}-\d{2}$/.test(ym) ? ym : TODAY.slice(0, 7);
+
+  const r = { n: 0, iss: 0, col: 0, retSum: 0, co: 0, inv: 0, exp: 0, expd: 0, gotd: 0, late: 0, inM: 0, outM: 0, net: 0 };
+
+  S.fin.forEach(f => {
+
+    const fDate = String(f.date || '');
+
+    const amt = Number(f.amt) || 0;
+
+    const share = Number(f.share) || 0;
+
+    const fRet = ret(f);
+
+    const dStr = dueStr(f);
+
+    if (fDate.slice(0, 7) === safeYm) { r.n++; r.iss += amt; }
+
+    const p = payOf(f);
+
+    if (p && String(p.date || '').slice(0, 7) === safeYm) {
+
+      r.col += Number(p.amt) || 0;
+
+      r.retSum += fRet;
+
+      r.co += f.src === 'o' ? fRet : fRet * (100 - share) / 100;
+
+      if (f.src !== 'o') r.inv += fRet * share / 100;
+
+    }
+
+    if (dStr.slice(0, 7) === safeYm) {
+
+      r.expd += amt + fRet;
+
+      if (f.paid) r.gotd += amt + fRet;
+
+      else if (TODAY > dStr) r.late += amt + fRet;
+
+    }
+
+  });
+
+  S.led.forEach(x => {
+
+    const xDate = String(x.date || '');
+
+    const amt = Number(x.amt) || 0;
+
+    if (xDate.slice(0, 7) === safeYm) {
+
+      if (x.type === 'exp') r.exp += amt;
+
+      if (isIn(x.type)) r.inM += amt;
+
+      else r.outM += amt;
+
+    }
+
+  });
+
+  r.net = r.co - r.exp;
+
+  return r;
+
+}
+
+
+
+function vRep() {
+
+  const L = [['cli','كشف حساب عميل'],['src','كشف مستثمر'],['mon','تقرير شهري'],['yr','تقرير سنوي']];
+
+  const map = { cli: cliStmt, src: srcStmt, mon: monRep, yr: yrRep };
+
+  return `
+
+    <div class="chips" style="margin-top:0">
+
+      ${L.map(x => `<button type="button" class="chip${RT === x[0] ? ' on' : ''}" onclick="RT='${x[0]}';render()">${x[1]}</button>`).join('')}
+
+      <button type="button" class="btn ghost sm noprint" style="margin-inline-start:auto" onclick="prt()">طباعة</button>
+
+    </div>
+
+    ${(map[RT] || cliStmt)()}`;
+
+}
+
+
+
+function cliStmt() {
+
+  if (!S.cli.length) return rh('كشف حساب عميل') + '<div class="card empty">لا يوجد عملاء مسجلون بعد.</div>';
+
+  const c = S.cli.find(x => x.id === RC) || S.cli[0];
+
+  RC = c.id;
+
+  const fs = S.fin.filter(f => f.cid === c.id), rows = [];
+
+  fs.forEach(f => {
+
+    const amt = Number(f.amt) || 0;
+
+    rows.push({ d: String(f.date || TODAY), t: 'تمويل من ' + nameOf(f.src) + ' (استحقاق ' + dueStr(f) + ')', dr: amt + ret(f), cr: 0, k: 1 });
+
+    const p = payOf(f);
+
+    if (p) rows.push({ d: String(p.date || TODAY), t: 'سداد', dr: 0, cr: Number(p.amt) || 0, k: 2 });
+
+  });
+
+  rows.sort((a, b) => a.d < b.d ? -1 : a.d > b.d ? 1 : a.k - b.k);
+
+  let bal = 0, td = 0, tc = 0;
+
+  const tr = rows.map(r => {
+
+    bal += r.dr - r.cr; td += r.dr; tc += r.cr;
+
+    return `<tr><td>${esc(r.d)}</td><td>${esc(r.t)}</td><td>${r.dr ? money(r.dr) : ''}</td><td class="ok">${r.cr ? money(r.cr) : ''}</td><td><b>${money(bal)}</b></td></tr>`;
+
+  }).join('');
+
+  const late = fs.filter(f => st(f) === 'late').reduce((a, f) => a + (Number(f.amt) || 0) + ret(f), 0);
+
+  const n = fs.filter(f => st(f) === 'late').length;
+
+
+
+  return rh('كشف حساب عميل') +
+
+    `<select class="sel" aria-label="العميل" onchange="RC=this.value;render()">${S.cli.map(x => `<option value="${esc(x.id)}"${x.id === c.id ? ' selected' : ''}>${esc(x.code + ' — ' + x.name)}</option>`).join('')}</select>` +
+
+    `<div class="card"><div class="rh"><h3>${esc(c.name)}</h3><span>${esc(c.code)} · هوية ${esc(c.nid)} · ${esc(c.phone || '—')}</span></div></div>` +
+
+    `<div class="tiles">${tl('إجمالي التمويل', money(fs.reduce((a, f) => a + (Number(f.amt) || 0), 0)))}${tl('إجمالي العوائد', money(fs.reduce((a, f) => a + ret(f), 0)))}${tl('إجمالي المسدد', money(tc), 'ok')}${tl('الرصيد المتبقي', money(bal), bal > 0 ? 'warn' : 'ok')}${tl('المتأخر (' + n + ')', money(late), late ? 'bad' : '')}</div>` +
+
+    `<div class="card"><h3>حركة الحساب</h3>${rows.length ? `<div class="tw"><table><thead><tr><th>التاريخ</th><th>البيان</th><th>عليه</th><th>له</th><th>الرصيد</th></tr></thead><tbody>${tr}</tbody><tfoot><tr><td colspan="2">الإجمالي</td><td>${money(td)}</td><td>${money(tc)}</td><td>${money(bal)}</td></tr></tfoot></table></div>` : '<div class="empty">لا توجد حركات لهذا العميل.</div>'}</div>`;
+
+}
+
+
+
+function srcStmt() {
+
+  const sl = srcs();
+
+  if (!sl.includes(RI)) RI = sl.length > 1 ? sl[1] : sl[0];
+
+  const s = RI, inv = s !== 'o', fs = S.fin.filter(f => f.src === s);
+
+  const got = fs.filter(f => f.paid).reduce((a, f) => a + ret(f) * (Number(f.share) || 0) / 100, 0);
+
+  const exp = fs.filter(f => !f.paid).reduce((a, f) => a + ret(f) * (Number(f.share) || 0) / 100, 0);
+
+  const co = fs.filter(f => f.paid).reduce((a, f) => a + (inv ? ret(f) * (100 - (Number(f.share) || 0)) / 100 : ret(f)), 0);
+
+  const mv = S.led.filter(x => x.src === s && (x.type === 'dep' || x.type === 'wd')).sort((a, b) => String(a.date || '') < String(b.date || '') ? -1 : 1);
+
+
+
+  return rh('كشف ' + (inv ? 'مستثمر' : 'أموال المكتب')) +
+
+    `<select class="sel" aria-label="المصدر" onchange="RI=this.value;render()">${sl.map(x => `<option value="${esc(x)}"${x === s ? ' selected' : ''}>${esc(nameOf(x))}</option>`).join('')}</select>` +
+
+    `<div class="tiles">${tl('الرصيد الجاهز', money(capOf(s)))}${tl('عوائد محصّلة', money(earnedOf(s)), earnedOf(s) >= 0 ? 'ok' : 'bad')}${tl('مموَّل حالياً', money(out(s)))}${tl('المتاح للتمويل', money(avail(s)))}${inv ? tl('نصيبه المحصّل', money(got), 'ok') + tl('نصيبه المتوقع', money(exp)) : ''}${tl('حصة الشركة', money(co))}</div>` +
+
+    `<div class="card"><h3>التمويلات من هذا المصدر</h3>${fs.length ? `<div class="tw"><table><thead><tr><th>العميل</th><th>التاريخ</th><th>الأصل</th><th>العائد</th>${inv ? '<th>نصيب المستثمر</th>' : ''}<th>الحالة</th></tr></thead><tbody>${fs.sort((a, b) => String(a.date || '') < String(b.date || '') ? 1 : -1).map(f => `<tr><td>${esc(cname(f.cid))}</td><td>${esc(f.date || '')}</td><td>${money(Number(f.amt) || 0)}</td><td>${money(ret(f))}</td>${inv ? `<td>${money(ret(f) * (Number(f.share) || 0) / 100)}</td>` : ''}<td>${tag(st(f))}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">لا توجد تمويلات.</div>'}</div>` +
+
+    `<div class="card"><h3>الإيداع والسحب</h3>${mv.length ? mv.map(x => rowItem(esc(x.note), esc(x.date || '') + ' · ' + LB[x.type], `<b class="${x.type === 'dep' ? 'ok' : 'bad'}">${x.type === 'dep' ? '+' : '−'} ${money(Number(x.amt) || 0)}</b>`)).join('') : '<div class="empty">لا توجد حركات.</div>'}</div>`;
+
+}
+
+
+
+function monRep() {
+
+  if (!/^\d{4}-\d{2}$/.test(RM)) RM = TODAY.slice(0, 7);
+
+  const r = mstat(RM), pc = r.expd ? Math.round(r.gotd / r.expd * 100) : 0;
+
+  const iss = S.fin.filter(f => String(f.date || '').slice(0, 7) === RM);
+
+  const pays = S.led.filter(x => x.type === 'pay' && String(x.date || '').slice(0, 7) === RM);
+
+  const exps = S.led.filter(x => x.type === 'exp' && String(x.date || '').slice(0, 7) === RM);
+
+
+
+  return rh('التقرير الشهري — ' + mlab(RM)) +
+
+    `<input class="sel" type="month" aria-label="الشهر" value="${esc(RM)}" onchange="if(this.value){RM=this.value;render();}">` +
+
+    `<div class="tiles">${tl('تمويل جديد (' + r.n + ')', money(r.iss))}${tl('التحصيل', money(r.col), 'ok')}${tl('العوائد المحصّلة', money(r.retSum))}${tl('أرباح الشركة', money(r.co))}${tl('أرباح المستثمرين', money(r.inv))}${tl('المصروفات', money(r.exp), r.exp ? 'bad' : '')}${tl('صافي ربح الشركة', money(r.net), r.net < 0 ? 'bad' : 'ok')}${tl('نسبة التحصيل', pc + '%')}${tl('متأخر من الشهر', money(r.late), r.late ? 'bad' : '')}${tl('داخل الخزنة', money(r.inM))}${tl('خارج الخزنة', money(r.outM))}</div>` +
+
+    `${catRows(RM)}<div class="two"><div class="card"><h3>التمويلات الجديدة</h3>${iss.length ? iss.map(f => rowItem(esc(cname(f.cid)), esc(nameOf(f.src)) + ' · ' + esc(f.date || ''), `<b>${money(Number(f.amt) || 0)}</b>`, tag(st(f)))).join('') : '<div class="empty">لا توجد.</div>'}</div>` +
+
+    `<div class="card"><h3>التحصيلات</h3>${pays.length ? pays.map(x => rowItem(esc(x.note), esc(x.date || ''), `<b class="ok">+ ${money(Number(x.amt) || 0)}</b>`)).join('') : '<div class="empty">لا توجد.</div><h3 style="margin-top:14px">المصروفات</h3>${exps.length ? exps.map(x => rowItem(esc(x.note), esc(x.date || ''), `<b class="bad">− ${money(Number(x.amt) || 0)}</b>`)).join('') : '<div class="empty">لا توجد.</div>'}</div></div>`;
+
+}
+
+
+
+function yrRep() {
+
+  if (!/^\d{4}$/.test(RY)) RY = TODAY.slice(0, 4);
+
+  const ys = new Set([TODAY.slice(0, 4)]);
+
+  S.fin.forEach(f => { const y = String(f.date || '').slice(0, 4); if (/^\d{4}$/.test(y)) ys.add(y); });
+
+  S.led.forEach(x => { const y = String(x.date || '').slice(0, 4); if (/^\d{4}$/.test(y)) ys.add(y); });
+
+  const rows = [], T = { iss: 0, col: 0, retSum: 0, co: 0, inv: 0, exp: 0, net: 0 };
+
+  for (let m = 1; m <= 12; m++) {
+
+    const ym = RY + '-' + ('0' + m).slice(-2), r = mstat(ym);
+
+    ['iss', 'col', 'retSum', 'co', 'inv', 'exp', 'net'].forEach(k => { T[k] += r[k]; });
+
+    rows.push(`<tr><td>${MN[m - 1]}</td><td>${money(r.iss)}</td><td>${money(r.col)}</td><td>${money(r.retSum)}</td><td>${money(r.co)}</td><td>${money(r.exp)}</td><td class="${r.net < 0 ? 'bad' : ''}">${money(r.net)}</td></tr>`);
+
+  }
+
+  return rh('التقرير السنوي — ' + RY) +
+
+    `<select class="sel" aria-label="السنة" onchange="RY=this.value;render()">${[...ys].sort().reverse().map(y => `<option value="${esc(y)}"${y === RY ? ' selected' : ''}>${esc(y)}</option>`).join('')}</select>` +
+
+    `<div class="tiles">${tl('إجمالي التمويل', money(T.iss))}${tl('إجمالي التحصيل', money(T.col), 'ok')}${tl('أرباح الشركة', money(T.co))}${tl('أرباح المستثمرين', money(T.inv))}${tl('المصروفات', money(T.exp), T.exp ? 'bad' : '')}${tl('صافي ربح الشركة', money(T.net), T.net < 0 ? 'bad' : 'ok')}</div>` +
+
+    `${catRows(RY)}<div class="card"><h3>التفصيل الشهري</h3><div class="tw"><table><thead><tr><th>الشهر</th><th>تمويل جديد</th><th>التحصيل</th><th>العوائد</th><th>أرباح الشركة</th><th>المصروفات</th><th>الصافي</th></tr></thead><tbody>${rows.join('')}</tbody><tfoot><tr><td>الإجمالي</td><td>${money(T.iss)}</td><td>${money(T.col)}</td><td>${money(T.retSum)}</td><td>${money(T.co)}</td><td>${money(T.exp)}</td><td>${money(T.net)}</td></tr></tfoot></table></div></div>`;
+
+}
+
+
+
+function catRows(p) {
+
+  const m = {};
+
+  S.led.filter(x => x.type === 'exp' && String(x.date || '').startsWith(p)).forEach(x => {
+
+    const k = x.cat || 'غير مصنف';
+
+    m[k] = (m[k] || 0) + (Number(x.amt) || 0);
+
+  });
+
+  const keys = Object.keys(m).sort((a, b) => m[b] - m[a]);
+
+  return `<div class="card"><h3>المصروفات حسب البند</h3>${keys.length ? keys.map(c => rowItem(esc(c), '', `<b class="bad">${money(m[c])}</b>`)).join('') : '<div class="empty">لا توجد مصروفات.</div>'}</div>`;
+
+}
+
+
+
+function vSet() {
+
+  return `
+
+    <div class="card">
+
+      <h3>إعدادات النظام</h3>
+
+      <div class="form">
+
+        <div><label for="so">اسم المكتب</label><input id="so" value="${esc(S.cfg.office)}"></div>
+
+        <div><label for="sr">نسبة العائد %</label><input id="sr" type="number" value="${S.cfg.rate}"></div>
+
+        <div><label for="sd">يوم الاستحقاق</label><input id="sd" type="number" min="1" max="28" value="${S.cfg.due}"></div>
+
+        <button type="button" class="btn" onclick="saveCfg()">حفظ</button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h3>المستثمرون</h3>
+
+      ${S.inv.map(i => rowItem(
+
+        esc(i.name),
+
+        `رصيده ${money(capOf(i.id))} · عوائد ${money(earnedOf(i.id))} · متاح ${money(avail(i.id))}`,
+
+        `<b>عائد المستثمر ${i.rate}%</b><small>عائد المكتب ${+(S.cfg.rate - i.rate).toFixed(1)}%</small>`,
+
+        '',
+
+        `<button type="button" class="btn ghost sm" onclick="editInv('${i.id}')">تعديل</button><button type="button" class="btn del sm" onclick="delInv('${i.id}')">حذف</button>`
+
+      )).join('') || '<div class="empty">لا يوجد مستثمرون.</div>'}
+
+      <div class="form" style="margin-top:14px">
+
+        <div><label for="in">اسم المستثمر</label><input id="in"></div>
+
+        <div><label for="is">عائد المستثمر %</label><input id="is" type="number" step="0.5"></div>
+
+        <div><label for="ic">مبلغ الإيداع</label><input id="ic" type="number"></div>
+
+        <button type="button" class="btn" onclick="addInv()">إضافة مستثمر</button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h3>بنود المصروفات</h3>
+
+      <div class="chips" style="margin-top:0">
+
+        ${S.cats.map((c, i) => `<span class="chip">${esc(c)} <button type="button" class="btn del sm" style="padding:0 6px;border:0;min-height:auto" onclick="delCat(${i})">✕</button></span>`).join('')}
+
+      </div>
+
+      <div class="form" style="margin-top:12px">
+
+        <div><label for="nc">بند جديد</label><input id="nc"></div>
+
+        <button type="button" class="btn" onclick="addCat()">إضافة بند</button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h3>النسخ الاحتياطي</h3>
+
+      <textarea id="bk" rows="4" aria-label="النسخة الاحتياطية"></textarea>
+
+      <div class="ia" style="margin-top:10px">
+
+        <button type="button" class="btn sm" onclick="bkShow()">عرض النسخة</button>
+
+        <button type="button" class="btn ghost sm" onclick="bkCopy()">نسخ</button>
+
+        <button type="button" class="btn ghost sm" onclick="bkDownload()">تحميل JSON</button>
+
+        <button type="button" class="btn del sm" onclick="bkRestore()">استيراد ورفع للسحاب</button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h3>سجل النشاط</h3>
+
+      ${S.log.slice(-30).reverse().map(x => rowItem(esc(x.a), esc(x.t) + ' · ' + esc(x.u), '')).join('') || '<div class="empty">لا توجد أنشطة بعد.</div>'}
+
+    </div>`;
+
+}
+
+
+
+async function saveCfg() {
+
+  const r = +$('sr').value, d = +$('sd').value, o = $('so').value.trim();
+
+  if (!(r > 0) || !(d >= 1 && d <= 28) || !o) { toast('تحقق من القيم المدخلة'); return; }
+
+  if (S.inv.some(i => i.rate > r)) { toast('نسبة العائد أقل من عائد أحد المستثمرين'); return; }
+
+  S.cfg = { office: o, rate: r, due: d };
+
+  addLog('تعديل الإعدادات');
+
+  render();
+
+  toast('تم حفظ الإعدادات');
+
+  await save();
+
+}
+
+
+
+async function addInv() {
+
+  const n = $('in').value.trim(), r = +$('is').value, c = +$('ic').value || 0;
+
+  if (!n || !(r >= 0 && r <= S.cfg.rate)) { toast('اكتب الاسم وعائد المستثمر بين 0 و ' + S.cfg.rate + '%'); return; }
+
+  const id = 'i' + Date.now();
+
+  S.inv.push({ id, name: n, rate: r });
+
+  if (c > 0) S.led.push({ id: 'l' + Date.now(), date: TODAY, type: 'dep', src: id, amt: c, note: 'إيداع ' + n });
+
+  addLog('مستثمر جديد: ' + n);
+
+  render();
+
+  toast('تمت إضافة المستثمر');
+
+  await save();
+
+}
+
+
+
+function editInv(id) {
+
+  const i = S.inv.find(x => x.id === id);
+
+  if (!i || ME.role !== 'admin') return;
+
+  openForm('تعديل مستثمر', [
+
+    { label: 'الاسم', value: i.name },
+
+    { label: 'عائد المستثمر % (من ' + S.cfg.rate + '%)', type: 'number', value: i.rate }
+
+  ], async v => {
+
+    const r = +v[1];
+
+    if (!v[0].trim() || !(r >= 0 && r <= S.cfg.rate)) { toast('تحقق من البيانات'); return false; }
+
+    i.name = v[0].trim(); i.rate = r;
+
+    addLog('تعديل مستثمر: ' + i.name);
+
+    render();
+
+    toast('تم التعديل');
+
+    await save();
+
+  });
+
+}
+
+
+
+function delInv(id) {
+
+  if (out(id) > 0) { toast('عليه تمويلات مفتوحة'); return; }
+
+  if (capOf(id) > 0) { toast('اسحب رصيده أولاً'); return; }
+
+  const i = S.inv.find(x => x.id === id);
+
+  ask('حذف المستثمر ' + (i ? i.name : '') + '؟', async () => {
+
+    S.inv = S.inv.filter(x => x.id !== id);
+
+    addLog('حذف مستثمر: ' + (i ? i.name : ''));
+
+    render();
+
+    toast('تم الحذف');
+
+    await save();
+
+  });
+
+}
+
+
+
+async function addCat() {
+
+  const c = $('nc').value.trim();
+
+  if (!c) { toast('اكتب اسم البند'); return; }
+
+  if (S.cats.includes(c)) { toast('البند موجود'); return; }
+
+  S.cats.push(c);
+
+  addLog('بند مصروف جديد: ' + c);
+
+  render();
+
+  await save();
+
+}
+
+
+
+async function delCat(i) {
+
+  const c = S.cats[i];
+
+  S.cats.splice(i, 1);
+
+  addLog('حذف بند مصروف: ' + c);
+
+  render();
+
+  await save();
+
+}
+
+
+
+function bkShow() { $('bk').value = JSON.stringify(S); }
+
+
+
+function bkCopy() {
+
+  bkShow();
+
+  const el = $('bk');
+
+  el.select();
+
+  el.setSelectionRange(0, 999999);
+
+  try {
+
+    toast(document.execCommand('copy') ? 'تم نسخ النسخة الاحتياطية' : 'انسخ النص يدوياً');
+
+  } catch (_) {
+
+    toast('انسخ النص يدوياً');
+
+  }
+
+}
+
+
+
+function bkDownload() {
+
+  const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(S, null, 2));
+
+  const a = document.createElement('a');
+
+  a.href = data;
+
+  a.download = 'tamweel-backup-' + TODAY + '.json';
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  toast('تم تحميل الملف');
+
+}
+
+
+
+function bkRestore() {
+
+  let parsed;
+
+  try { parsed = JSON.parse($('bk').value); } catch (_) { toast('النص غير صالح'); return; }
+
+  if (!parsed || !parsed.cfg || !['inv', 'cli', 'fin', 'led', 'users'].every(k => Array.isArray(parsed[k])) || !parsed.users.some(x => x.role === 'admin')) {
+
+    toast('هذه ليست نسخة احتياطية صحيحة');
+
+    return;
+
+  }
+
+  ask('سيتم استبدال البيانات الحالية بالنسخة المستوردة. متأكد؟', async () => {
+
+    S = normalize(parsed);
+
+    ME = S.users.find(x => x.u === ME.u && x.p === ME.p) || S.users.find(x => x.role === 'admin') || null;
+
+    addLog('استعادة نسخة احتياطية');
+
+    render();
+
+    toast('تمت الاستعادة');
+
+    await save();
+
+  });
+
+}
+
+
+
+function vUsr() {
+
+  return `
+
+    <div class="card">
+
+      <h3>المستخدمون والصلاحيات</h3>
+
+      ${S.users.map(u => rowItem(
+
+        esc(u.name),
+
+        '@' + esc(u.u),
+
+        `<b>${ROLE[u.role]}</b>`,
+
+        '',
+
+        `<button type="button" class="btn ghost sm" onclick="editUsr('${esc(u.u)}')">تعديل</button>` +
+
+        (u.u === ME.u ? '' : `<button type="button" class="btn del sm" onclick="delUsr('${esc(u.u)}')">حذف</button>`)
+
+      )).join('')}
+
+      <div class="form" style="margin-top:14px">
+
+        <div><label for="nu">اسم المستخدم</label><input id="nu" autocomplete="off"></div>
+
+        <div><label for="nn">الاسم</label><input id="nn"></div>
+
+        <div><label for="np">كلمة المرور</label><input id="np"></div>
+
+        <div><label for="nr">الصلاحية</label><select id="nr"><option value="admin">مدير</option><option value="acc">محاسب</option><option value="view">مشاهدة فقط</option></select></div>
+
+        <button type="button" class="btn" onclick="addUsr()">إضافة مستخدم</button>
+
+      </div>
+
+    </div>`;
+
+}
+
+
+
+async function addUsr() {
+
+  const u = $('nu').value.trim(), n = $('nn').value.trim(), p = $('np').value, r = $('nr').value;
+
+  if (!u || !n || p.length < 4) { toast('أكمل البيانات (كلمة المرور 4 أحرف على الأقل)'); return; }
+
+  if (S.users.some(x => x.u === u)) { toast('اسم المستخدم مستخدم من قبل'); return; }
+
+  S.users.push({ u, p, role: r, name: n });
+
+  addLog('مستخدم جديد: ' + u);
+
+  render();
+
+  toast('تمت إضافة المستخدم');
+
+  await save();
+
+}
+
+
+
+function editUsr(un) {
+
+  const u = S.users.find(x => x.u === un);
+
+  if (!u || ME.role !== 'admin') return;
+
+  const self = u.u === ME.u;
+
+  const fields = [
+
+    { label: 'الاسم', value: u.name },
+
+    { label: 'كلمة مرور جديدة (اتركها فارغة للإبقاء على الحالية)', value: '' }
+
+  ];
+
+  if (!self) fields.push({ label: 'الصلاحية', opts: [['admin','مدير'],['acc','محاسب'],['view','مشاهدة فقط']], value: u.role });
+
+  openForm('تعديل مستخدم', fields, async v => {
+
+    if (!v[0].trim()) { toast('الاسم مطلوب'); return false; }
+
+    if (v[1] && v[1].length < 4) { toast('كلمة المرور قصيرة'); return false; }
+
+    u.name = v[0].trim();
+
+    if (v[1]) u.p = v[1];
+
+    if (!self) u.role = v[2];
+
+    addLog('تعديل مستخدم: ' + u.u);
+
+    render();
+
+    toast('تم التعديل');
+
+    await save();
+
+  });
+
+}
+
+
+
+function delUsr(u) {
+
+  ask('حذف المستخدم ' + u + '؟', async () => {
+
+    S.users = S.users.filter(x => x.u !== u);
+
+    addLog('حذف مستخدم: ' + u);
+
+    render();
+
+    await save();
+
+  });
+
+}
+
+
+
+Object.assign(window, {
+
+  go, tog, login, logout, doSetup, openInitialRestore, render,
+
+  setFS, finItems, addFin, pay, undoPay, delFin, editFin,
+
+  addCli, editCli, delCli, stmt,
+
+  setLF, opType, addOp, editOp, delOp,
+
+  prt, saveCfg, addInv, editInv, delInv, addCat, delCat,
+
+  bkShow, bkCopy, bkDownload, bkRestore, addUsr, editUsr, delUsr
+
+});
+
+
+
+render();
+
+connectCloud();
+
+</script>
+
+</body>
+
+</html>
